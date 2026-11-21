@@ -1,0 +1,34 @@
+// Copyright (C) 2017-2026 Smart code 203358507
+
+export type EPGChannel = {
+    id: string;
+    type: string;
+    name: string;
+    logo: string | null;
+    deepLinks?: MetaItemDeepLinks;
+};
+
+export type EPGShow = Pick<Video, 'id' | 'title' | 'overview' | 'thumbnail' | 'background' | 'links' | 'runtime' | 'releaseInfo' | 'released' | 'genres' | 'cast' | 'directors' | 'ratings' | 'startTime' | 'endTime' | 'deepLinks'>;
+
+export type EPGProgram = {
+    id?: string;
+    title: string;
+    overview: string | null;
+    thumbnail?: string | null;
+    background?: string | null;
+    links?: Link[];
+    runtime?: string | null;
+    releaseInfo?: string | null;
+    released?: string | null;
+    genres?: string[];
+    cast?: string[];
+    directors?: string[];
+    ratings?: ContentRating[];
+    startTime: Date;
+    endTime: Date;
+    channelId: string;
+    channelName: string;
+    channelLogo: string | null;
+    deepLinks?: MetaItemDeepLinks | VideoDeepLinks;
+    raw: Record<string, unknown>;
+};

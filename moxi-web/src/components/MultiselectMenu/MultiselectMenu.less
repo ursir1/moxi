@@ -1,0 +1,31 @@
+// Copyright (C) 2017-2024 Smart code 203358507
+
+@import (reference) './Dropdown/Dropdown.less';
+
+@border-radius: 2.75rem;
+
+.multiselect-menu {
+    position: relative;
+    min-width: 8.5rem;
+    overflow: visible;
+    border-radius: @border-radius;
+
+    &:hover,
+    &.active {
+        background-color: var(--overlay-color);
+    }
+}
+
+.menu-popup {
+    display: flex;
+    flex-direction: column;
+    min-width: max(11rem, var(--anchor-width, 0px));
+
+    > [role='listbox'] {
+        position: static;
+        min-height: 0;
+        max-height: calc(@item-height * 7);
+        overflow: auto;
+        box-shadow: none;
+    }
+}

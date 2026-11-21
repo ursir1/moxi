@@ -1,0 +1,139 @@
+// Copyright (C) 2017-2026 Smart code 203358507
+
+:import('~stremio/components/BottomSheet/BottomSheet.less') {
+    sheet-container: container;
+    sheet-content: content;
+}
+
+:import('~stremio/components/MetaPreview/MetaPreview.less') {
+    preview: meta-preview;
+    preview-body: body;
+    preview-logo: logo;
+    preview-name: name;
+    preview-title: title;
+    preview-facts: facts;
+    preview-description: description;
+    preview-links: links;
+    preview-actions: actions;
+    preview-art: image;
+}
+
+.sheet .preview {
+    padding: 1.75rem 1.5rem 1rem;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+}
+
+.sheet {
+    .preview .preview-art {
+        filter: blur(1px);
+    }
+
+    .preview .preview-facts {
+        justify-content: flex-start;
+        gap: 0;
+        padding: 0;
+
+        > :not(:first-child) {
+            position: relative;
+            margin-left: 0.5rem;
+            padding-left: 0.75rem;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 1px;
+                height: 1.25rem;
+                transform: translateY(-50%);
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+    }
+}
+
+@media (orientation: portrait) {
+    .sheet {
+        .preview {
+            padding-top: 2.25rem;
+            padding-bottom: calc(1rem + var(--safe-area-inset-bottom));
+
+            .preview-body {
+                min-height: 0;
+            }
+
+            .preview-logo {
+                width: auto;
+                height: 3.5rem;
+                max-width: min(18rem, 70vw);
+                margin: 0 0 1rem;
+                object-position: left center;
+            }
+
+            .preview-name {
+                height: 3.5rem;
+                margin: 0 0 1rem;
+            }
+
+            .preview-facts {
+                margin-top: 0;
+            }
+
+            .preview-title ~ .preview-facts {
+                margin-top: 1rem;
+            }
+
+            .preview-description {
+                margin-top: 1rem;
+                line-height: 1.6;
+            }
+
+            .preview-links {
+                margin-top: 1.25rem;
+            }
+
+            .preview-actions {
+                padding-top: 0.5rem;
+            }
+        }
+    }
+}
+
+@media (orientation: landscape) {
+    .sheet .preview {
+        height: auto;
+        padding: 1.5rem;
+
+        .preview-logo {
+            object-position: left center;
+        }
+    }
+}
+
+.sheet {
+    .sheet-container {
+        height: 100%;
+    }
+
+    .sheet-content {
+        display: flex;
+        flex-direction: column;
+        border-radius: 0;
+    }
+
+    @media (orientation: portrait) {
+        .sheet-container {
+            height: 50%;
+            max-height: 50%;
+        }
+    }
+
+    @media (orientation: landscape) {
+        .sheet-container {
+            height: auto;
+            max-width: min(56rem, calc(100% - 3rem - var(--safe-area-inset-left) - var(--safe-area-inset-right)));
+        }
+    }
+}

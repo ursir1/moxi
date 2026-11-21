@@ -1,0 +1,118 @@
+@import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
+
+@track-height: 1.7rem;
+@thumb-size: 1.2rem;
+@thumb-inset: calc((@track-height - @thumb-size) / 2);
+@dot-size: 0.3rem;
+@step: calc(var(--index) * (100% - @track-height) / (var(--count) - 1));
+
+.scale {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--count), 1fr);
+    width: 100%;
+    touch-action: pan-y;
+    user-select: none;
+
+    .stop {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        padding-bottom: calc(@track-height + 0.5rem);
+
+        &:focus-visible {
+            outline: none;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: @thumb-inset;
+                left: 50%;
+                width: @thumb-size;
+                height: @thumb-size;
+                margin-left: calc(@thumb-size / -2);
+                border-radius: 50%;
+                outline: var(--focus-outline-size) solid var(--primary-foreground-color);
+                outline-offset: 2px;
+            }
+        }
+
+        .label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            opacity: 0.5;
+        }
+
+        &.active .label {
+            font-weight: 600;
+            opacity: 1;
+        }
+    }
+
+    .track {
+        position: absolute;
+        bottom: 0;
+        left: calc(50% / var(--count) - @track-height / 2);
+        right: calc(50% / var(--count) - @track-height / 2);
+        height: @track-height;
+        border-radius: @track-height;
+        background-color: var(--overlay-color);
+        overflow: hidden;
+        pointer-events: none;
+
+        .fill {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: calc(@step + @track-height);
+            border-radius: @track-height;
+            background-color: var(--primary-accent-color);
+            transition: width 0.1s ease-in-out;
+        }
+
+        .dots {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: calc(@track-height / 2 - @dot-size / 2);
+            right: calc(@track-height / 2 - @dot-size / 2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .dot {
+                width: @dot-size;
+                height: @dot-size;
+                border-radius: 50%;
+                background-color: @color-surface-light5-20;
+            }
+        }
+
+        .thumb {
+            position: absolute;
+            top: @thumb-inset;
+            left: calc(@thumb-inset + @step);
+            width: @thumb-size;
+            height: @thumb-size;
+            border-radius: 50%;
+            background-color: var(--primary-foreground-color);
+            transition: left 0.1s ease-in-out;
+        }
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .scale .stop:hover .label {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scale .track {
+        .fill, .thumb {
+            transition: none;
+        }
+    }
+}

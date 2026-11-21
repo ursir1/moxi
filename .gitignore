@@ -1,0 +1,9 @@
+# Dependencies and builds
+**/node_modules/
+**/target/
+**/build/
+**/*.log
+**/.DS_Store
+
+# Large binaries exceeding GitHub's 100MB limit
+**/libmpv-2.dll

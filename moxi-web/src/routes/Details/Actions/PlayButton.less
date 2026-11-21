@@ -1,0 +1,88 @@
+// Copyright (C) 2017-2026 Smart code 203358507
+
+@import (reference) '../variables.less';
+
+.play-button {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    height: 3.5rem;
+    max-width: 100%;
+    padding: 0 1.75rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #38d98a 0%, #22b36b 55%, #12854c 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 215, 94, 0.45), 0 8px 22px rgba(34, 179, 107, 0.28);
+    color: #ffffff;
+    transition: background-color 0.15s @ease, transform 0.15s @ease;
+
+    &:hover, &:focus {
+        background: linear-gradient(135deg, var(--color-gold-bright) 0%, var(--color-gold) 55%, var(--color-gold-dark) 100%);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25), 0 8px 22px rgba(242, 181, 29, 0.35);
+        color: #171204;
+
+        .separator {
+            background-color: rgba(23, 18, 4, 0.4);
+        }
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &.disabled {
+        background-color: var(--overlay-color);
+        color: @text-secondary;
+    }
+
+    .icon {
+        flex: none;
+        width: 1.375rem;
+        height: 1.375rem;
+    }
+
+    .label {
+        flex: none;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .separator {
+        flex: none;
+        width: 1px;
+        height: 1.25rem;
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .sublabel {
+        flex: 0 1 auto;
+        min-width: 0;
+        max-width: 14rem;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        opacity: 0.8;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@media @desktop-short {
+    .play-button {
+        height: 3rem;
+        padding: 0 1.25rem;
+    }
+}
+
+@media @mobile {
+    .play-button {
+        height: 3.25rem;
+
+        .sublabel {
+            max-width: 9rem;
+        }
+    }
+}

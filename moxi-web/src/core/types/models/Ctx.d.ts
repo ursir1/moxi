@@ -1,0 +1,129 @@
+type Auth = {
+    key: string,
+    user: {
+        _id: string,
+        avatar: string,
+        email: string,
+        trakt: {
+            access_token: string,
+            created_at: number,
+            expires_in: number,
+        },
+        isNewUser: boolean,
+    },
+};
+
+type Settings = {
+    audioLanguage: string,
+    audioPassthrough: boolean,
+    autoFrameRateMatching: boolean,
+    bingeWatching: boolean,
+    discordRpcEnabled: boolean,
+    hardwareDecoding: boolean,
+    gpuVideoProcessing: boolean,
+    videoMode: string | null,
+    escExitFullscreen: boolean,
+    interfaceLanguage: string,
+    interfaceScale: number,
+    quitOnClose: boolean,
+    hideSpoilers: boolean,
+    gamepadSupport: boolean,
+    nextVideoNotificationDuration: number,
+    playInBackground: boolean,
+    playerType: string | null,
+    secondaryAudioLanguage: string | null,
+    secondarySubtitlesLanguage: string | null,
+    seekTimeDuration: number,
+    seekShortTimeDuration: number,
+    streamingServerUrl: string,
+    remoteHttps: string | null,
+    streamingServerWarningDismissed: Date | null,
+    subtitlesBackgroundColor: string,
+    subtitlesBold: boolean,
+    subtitlesFont: string,
+    subtitlesLanguage: string | null,
+    subtitlesOffset: number,
+    subtitlesOutlineColor: string,
+    subtitlesSize: number,
+    subtitlesTextColor: string,
+    assSubtitlesStyling: boolean,
+    surroundSound: boolean,
+    pauseOnMinimize: boolean,
+    boardSpotlight: BoardSpotlight,
+};
+
+type BoardSpotlight = {
+    enabled: boolean,
+    catalogs: ResourceRequest[],
+    showCatalogRows: boolean,
+};
+
+type Profile = {
+    auth: Auth | null,
+    addons: Addon[],
+    settings: Settings,
+};
+
+type Notifications = {
+    uid: string,
+    created: string,
+    items: Record<string, NotificationItem[]>,
+};
+
+type NotificationItem = {
+    metaId: string,
+    videoId: string,
+    videoReleased: string,
+};
+
+type SearchHistoryItem = {
+    query: string,
+    deepLinks: {
+        search: string,
+    },
+};
+
+type SearchHistory = SearchHistoryItem[];
+
+type StreamingServerUrl = {
+    url: string,
+    mtime: Date,
+};
+
+type StreamingServerUrls = StreamingServerUrl[];
+
+type RemoteNotificationButton = {
+    id: string,
+    label: string,
+    style: string,
+    openUrl: string | null,
+    navigate: string | null,
+};
+
+type RemoteNotification = {
+    id: string,
+    rev: number,
+    template: string,
+    title: string,
+    body: string | null,
+    image: string | null,
+    buttons: RemoteNotificationButton[],
+};
+
+type ExperimentAssignment = {
+    variant: string,
+    payload: unknown,
+};
+
+type RemoteConfig = {
+    notifications: RemoteNotification[],
+    experiments: Record<string, ExperimentAssignment>,
+};
+
+type Ctx = {
+    profile: Profile,
+    notifications: Notifications,
+    searchHistory: SearchHistory,
+    streamingServerUrls: StreamingServerUrls,
+    remoteConfig: RemoteConfig,
+};
