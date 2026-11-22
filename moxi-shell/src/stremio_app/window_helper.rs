@@ -14,7 +14,7 @@ use winapi::um::winuser::{
 
 const DWMWA_CAPTION_COLOR: DWORD = 35;
 const DWMWA_TEXT_COLOR: DWORD = 36;
-const STREMIO_CAPTION_COLOR: DWORD = colorref(0x15, 0x12, 0x2b);
+const MOXI_CAPTION_COLOR: DWORD = colorref(0x0a, 0x10, 0x0c);
 const WHITE_TEXT_COLOR: DWORD = colorref(0xff, 0xff, 0xff);
 
 const fn colorref(red: DWORD, green: DWORD, blue: DWORD) -> DWORD {
@@ -102,8 +102,8 @@ impl WindowStyle {
             DwmSetWindowAttribute(
                 hwnd,
                 DWMWA_CAPTION_COLOR,
-                &STREMIO_CAPTION_COLOR as *const _ as *const c_void,
-                mem::size_of_val(&STREMIO_CAPTION_COLOR) as DWORD,
+                &MOXI_CAPTION_COLOR as *const _ as *const c_void,
+                mem::size_of_val(&MOXI_CAPTION_COLOR) as DWORD,
             );
             DwmSetWindowAttribute(
                 hwnd,

@@ -653,7 +653,7 @@ impl MainWindow {
             self.splash_screen.hide();
             nwg::modal_error_message(
                 &self.window,
-                "Cannot load Stremio Web UI",
+                "Cannot load Moxi Web UI",
                 &error.to_string(),
             );
         } else {

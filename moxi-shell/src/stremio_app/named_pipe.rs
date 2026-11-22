@@ -225,7 +225,7 @@ pub fn acquire_single_instance(
             match stream.write_all(command).and_then(|_| stream.flush()) {
                 Ok(()) => return SingleInstance::Forwarded,
                 Err(error) => {
-                    eprintln!("Failed to forward command to existing Stremio instance: {error}")
+                    eprintln!("Failed to forward command to existing Moxi instance: {error}")
                 }
             }
         }
