@@ -9,11 +9,10 @@
 [![Release](https://img.shields.io/github/v/release/ursir1/moxi?style=for-the-badge&color=2FBF71)](https://github.com/ursir1/moxi/releases)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-F2B51D?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?style=for-the-badge&logo=windows)](https://github.com/ursir1/moxi/releases)
-[![Web Deployment](https://img.shields.io/badge/Web%20App-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare)](https://moxi-5n1.pages.dev/)
 [![React](https://img.shields.io/badge/Frontend-React%2018%20%7C%20TypeScript-61DAFB?style=for-the-badge&logo=react)](moxi-web)
 [![Rust](https://img.shields.io/badge/Shell-Rust%20%7C%20MPV%20%7C%20WebView2-DEA584?style=for-the-badge&logo=rust)](moxi-shell)
 
-[**🌐 Launch Web Player**](https://moxi-5n1.pages.dev/) &nbsp;|&nbsp; [**📥 Download Desktop App**](https://github.com/ursir1/moxi/releases) &nbsp;|&nbsp; [**📖 Architecture**](#-architecture) &nbsp;|&nbsp; [**🛠️ Developer Guide**](#-building-locally)
+[**📥 Download Desktop App**](https://github.com/ursir1/moxi/releases) &nbsp;|&nbsp; [**📖 Architecture**](#-architecture) &nbsp;|&nbsp; [**🛠️ Developer Guide**](#-building-locally)
 
 ---
 
@@ -47,7 +46,7 @@
 ## ✨ Key Features
 
 - ⚡ **Hardware-Accelerated Video Playback**: Dedicated MPV engine handles 4K, 8K, HDR, HEVC, AV1, VP9, and smooth SSA/ASS subtitle rendering with zero stutter.
-- 🌐 **Available Everywhere**: Seamlessly switch between the native Windows desktop application and the global web client at [moxi-5n1.pages.dev](https://moxi-5n1.pages.dev/).
+- 🌐 **Available Everywhere**: Seamlessly switch between the native Windows desktop application and the self-hosted web client — deploy `moxi-web` on any static host.
 - 🧩 **Extensible Addon Ecosystem**: Full compatibility with the Stremio addon protocol. Connect catalog, metadata, streaming, and subtitle addons with one click.
 - 🎨 **Cinematic Moxi Theme**: Custom dark emerald aesthetic with warm gold accents, tailored for home theater and desktop setups.
 - 🔄 **Cloud & Local Synchronization**: Keep your library, watch progress, and addon configurations synchronized across sessions.
@@ -68,8 +67,7 @@ Download the latest version from [GitHub Releases](https://github.com/ursir1/mox
 
 ### Web Client
 
-You can run Moxi directly in any modern browser (Chrome, Edge, Firefox, Brave, Safari) without installing software:
-👉 **[https://moxi-5n1.pages.dev/](https://moxi-5n1.pages.dev/)**
+You can self-host the web UI by building `moxi-web` and deploying the `build/` folder to any static hosting provider (Cloudflare Pages, Vercel, Netlify, GitHub Pages, etc.).
 
 ---
 
