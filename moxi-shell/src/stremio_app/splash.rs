@@ -6,7 +6,7 @@ use native_windows_gui as nwg;
 pub struct SplashImage {
     #[nwg_resource]
     embed: nwg::EmbedResource,
-    #[nwg_resource(size: Some((300,300)), source_embed: Some(&data.embed), source_embed_str: Some("SPLASHIMAGE"))]
+    #[nwg_resource(size: Some((150,150)), source_embed: Some(&data.embed), source_embed_str: Some("SPLASHIMAGE"))]
     splash_image: nwg::Bitmap,
     #[nwg_layout(spacing: 0, min_size: [WINDOW_MIN_WIDTH as u32, WINDOW_MIN_HEIGHT as u32])]
     grid: nwg::GridLayout,
