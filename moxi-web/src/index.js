@@ -27,7 +27,12 @@ const { name: os } = require('./common/Platform/device');
 const translations = Object.fromEntries(Object.entries(stremioTranslations()).map(([key, value]) => [key, {
     translation: {
         ...value,
-        ABOUT_STREMIO: 'About Moxi'
+        ABOUT_STREMIO: 'About Moxi',
+        UPDATER_TITLE: 'A new version of Moxi is available',
+        UPGRADE: 'New version is available! Upgrade to the latest Moxi version',
+        MANUAL_UPDATE_TITLE: 'Update your Moxi version',
+        MANUAL_UPDATE_LINE1: 'You are running an outdated version of Moxi which is highly unrecommended.',
+        RELAUNCH: 'Re-launch Moxi now!'
     }
 }]));
 
