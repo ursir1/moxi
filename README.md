@@ -19,6 +19,22 @@
 
 </div>
 
+## 📸 Screenshots
+
+<div align="center">
+
+| Home — Featured Content | Discover — Movies & Series |
+|:---:|:---:|
+| ![Moxi Home Screen](.github/screenshots/screenshot1.png) | ![Moxi Discover](.github/screenshots/screenshot2.png) |
+
+| Player — Full Cinema Experience |
+|:---:|
+| ![Moxi Player](.github/screenshots/screenshot3.png) |
+
+</div>
+
+---
+
 ## 🌟 Overview
 
 **Moxi** is an open-source, hardware-accelerated media streaming client and web application. Designed for cinematic viewing with an emerald-and-gold visual identity, Moxi combines a native desktop shell with a fast, modern web frontend to organize and stream movies, TV shows, anime, YouTube, and live feeds from community addons.
