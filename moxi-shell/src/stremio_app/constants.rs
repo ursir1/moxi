@@ -6,7 +6,7 @@ pub const IPC_PATH: &str = "//./pipe/com.moxi5.";
 pub const IPC_ATTEMPTS: u32 = 10;
 pub const IPC_RETRY_DELAY: Duration = Duration::from_millis(100);
 pub const DEV_ENDPOINT: &str = "http://127.0.0.1:11470";
-pub const WEB_ENDPOINT: &str = "https://web.stremio.com/";
+pub const WEB_ENDPOINT: &str = "https://moxi-5n1.pages.dev/";
 pub const STA_ENDPOINT: &str = "https://staging.strem.io/";
 pub const WINDOW_MIN_WIDTH: i32 = 1000;
 pub const WINDOW_MIN_HEIGHT: i32 = 600;
@@ -23,6 +23,8 @@ pub const SRV_LOG_SIZE: usize = 20;
 
 pub const WARNING_URL: &str = "https://www.stremio.com/warning#";
 pub const WHITELISTED_HOSTS: &[&str] = &[
+    "moxi-5n1.pages.dev",
+    "pages.dev",
     "stremio.com",
     "www.stremio.com",
     "web.stremio.com",
