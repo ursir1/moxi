@@ -1,0 +1,90 @@
+name: Build & Release Moxi
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Release Windows App
+    if: contains(github.event.head_commit.message, '[release]') || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 11.8.0
+          run_install: false
+
+      - name: Build Web UI (moxi-web)
+        working-directory: moxi-web
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm build
+
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-pc-windows-msvc
+
+      - name: Build Native Shell (moxi-shell)
+        working-directory: moxi-shell
+        run: |
+          cargo build --release --target x86_64-pc-windows-msvc
+
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup --no-progress
+
+      - name: Compile Windows Installer
+        working-directory: moxi-shell
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "setup\Stremio.iss"
+
+      - name: Determine Version & Tag
+        id: release_info
+        shell: pwsh
+        run: |
+          $date = Get-Date -Format "yyyyMMdd-HHmmss"
+          $tag = "v5.0-$date"
+          echo "TAG=$tag" >> $env:GITHUB_OUTPUT
+          echo "Release tag: $tag"
+
+      - name: Create GitHub Release & Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release_info.outputs.TAG }}
+          name: "Moxi Desktop ${{ steps.release_info.outputs.TAG }}"
+          body: |
+            ## Moxi Desktop for Windows 🎬
+
+            Automated release triggered by commit:
+            > ${{ github.event.head_commit.message }}
+
+            ### 📦 Downloads:
+            - **Windows Installer (`.exe`)**: Download `MoxiSetup-*.exe` below to install Moxi on your laptop.
+            - **Standalone Executable**: Download `moxi.exe` for portable usage.
+          files: |
+            moxi-shell/MoxiSetup*.exe
+            moxi-shell/target/x86_64-pc-windows-msvc/release/moxi.exe
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

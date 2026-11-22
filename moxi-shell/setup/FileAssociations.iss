@@ -1,19 +1,19 @@
 ; Shared by the x64 and ARM64 per-user installers.
-#define AssocCapabilities "Software\Stremio5\Capabilities"
-#define AssocTorrentKey "Stremio5.Torrent"
-#define AssocStremioKey "Stremio5.Url"
-#define AssocMagnetKey "Stremio5.Magnet"
+#define AssocCapabilities "Software\Moxi\Capabilities"
+#define AssocTorrentKey "Moxi.Torrent"
+#define AssocStremioKey "Moxi.Url"
+#define AssocMagnetKey "Moxi.Magnet"
 
 [Registry]
-Root: HKCU; Subkey: "Software\RegisteredApplications"; ValueType: string; ValueName: "Stremio5"; ValueData: "{#AssocCapabilities}"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "{#AssocCapabilities}"; ValueType: string; ValueName: "ApplicationName"; ValueData: "Stremio"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "{#AssocCapabilities}"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Stremio links, torrent files and magnet links"
+Root: HKCU; Subkey: "Software\RegisteredApplications"; ValueType: string; ValueName: "Moxi"; ValueData: "{#AssocCapabilities}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "{#AssocCapabilities}"; ValueType: string; ValueName: "ApplicationName"; ValueData: "Moxi"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "{#AssocCapabilities}"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Moxi links, torrent files and magnet links"
 Root: HKCU; Subkey: "{#AssocCapabilities}"; ValueType: string; ValueName: "ApplicationIcon"; ValueData: "{app}\{#MyAppExeName},0"
-Root: HKCU; Subkey: "{#AssocCapabilities}\URLAssociations"; ValueType: string; ValueName: "stremio"; ValueData: "{#AssocStremioKey}"
+Root: HKCU; Subkey: "{#AssocCapabilities}\URLAssociations"; ValueType: string; ValueName: "moxi"; ValueData: "{#AssocStremioKey}"
 Root: HKCU; Subkey: "{#AssocCapabilities}\URLAssociations"; ValueType: string; ValueName: "magnet"; ValueData: "{#AssocMagnetKey}"; Tasks: assoctorrent
 Root: HKCU; Subkey: "{#AssocCapabilities}\FileAssociations"; ValueType: string; ValueName: ".torrent"; ValueData: "{#AssocTorrentKey}"; Tasks: assoctorrent
 
-Root: HKCU; Subkey: "Software\Classes\{#AssocStremioKey}"; ValueType: string; ValueName: ""; ValueData: "URL:Stremio Protocol"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\{#AssocStremioKey}"; ValueType: string; ValueName: ""; ValueData: "URL:Moxi Protocol"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\Classes\{#AssocStremioKey}"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
 Root: HKCU; Subkey: "Software\Classes\{#AssocStremioKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
 Root: HKCU; Subkey: "Software\Classes\{#AssocStremioKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""

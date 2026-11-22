@@ -1,8 +1,8 @@
 use std::time::Duration;
 use url::Url;
 
-pub const APP_NAME: &str = "Stremio";
-pub const IPC_PATH: &str = "//./pipe/com.stremio5.";
+pub const APP_NAME: &str = "Moxi";
+pub const IPC_PATH: &str = "//./pipe/com.moxi5.";
 pub const IPC_ATTEMPTS: u32 = 10;
 pub const IPC_RETRY_DELAY: Duration = Duration::from_millis(100);
 pub const DEV_ENDPOINT: &str = "http://127.0.0.1:11470";

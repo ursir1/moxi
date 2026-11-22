@@ -48,7 +48,7 @@ use super::stremio_server::{ServerEvent, StremioServer};
 const WEBUI_RETRY_DELAYS_SECS: [u64; 2] = [2, 5];
 const WEBUI_READY_TIMEOUT_SECS: u64 = 30;
 const WEBUI_RETRY_READY_TIMEOUT_SECS: u64 = 15;
-const WEBUI_UNREACHABLE: &str = "Stremio couldn't load its interface. \
+const WEBUI_UNREACHABLE: &str = "Moxi couldn't load its interface. \
     Check your internet connection, VPN or firewall, then click Retry.";
 
 pub enum WebUiEvent {
@@ -702,7 +702,7 @@ impl MainWindow {
         let choice = nwg::modal_message(
             &self.window,
             &nwg::MessageParams {
-                title: "Stremio",
+                title: "Moxi",
                 content: details,
                 buttons: nwg::MessageButtons::RetryCancel,
                 icons: nwg::MessageIcons::Error,
@@ -763,12 +763,12 @@ impl MainWindow {
                     self.splash_screen.hide();
                     self.on_show();
                     let content = format!(
-                        "Stremio's local streaming server is unavailable.\n\n{details}\n\nChoose Retry to start the server again, or Cancel to exit Stremio."
+                        "Moxi's local streaming server is unavailable.\n\n{details}\n\nChoose Retry to start the server again, or Cancel to exit Moxi."
                     );
                     let choice = nwg::modal_message(
                         &self.window,
                         &nwg::MessageParams {
-                            title: "Stremio server",
+                            title: "Moxi server",
                             content: &content,
                             buttons: nwg::MessageButtons::RetryCancel,
                             icons: nwg::MessageIcons::Error,

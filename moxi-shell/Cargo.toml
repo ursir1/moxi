@@ -3,6 +3,10 @@ name = "moxi-shell"
 version = "5.0.28"
 edition = "2018"
 
+[[bin]]
+name = "moxi"
+path = "src/main.rs"
+
 [dependencies]
 base64 = "0.22"
 discord-rich-presence = "1"

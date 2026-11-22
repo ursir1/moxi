@@ -4,7 +4,7 @@ use std::{env, fs, io::Cursor, path::PathBuf};
 extern crate winres;
 fn main() {
     let now = Local::now();
-    let copyright = format!("Copyright © {} Smart Code OOD", now.year());
+    let copyright = format!("Copyright © {} Moxi", now.year());
     let exe_name = format!("{}.exe", env::var("CARGO_PKG_NAME").unwrap());
     let mut res = winres::WindowsResource::new();
     res.set_manifest(
@@ -32,7 +32,7 @@ fn main() {
     </assembly>
     "#,
     );
-    res.set("FileDescription", "Freedom to Stream");
+    res.set("FileDescription", "Moxi - Freedom to Stream");
     res.set("LegalCopyright", &copyright);
     res.set("OriginalFilename", &exe_name);
     res.set_icon_with_id("images/stremio.ico", "MAINICON");
