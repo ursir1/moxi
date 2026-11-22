@@ -59,7 +59,7 @@ const StreamingServerWarning = ({ className }: Props) => {
             </div>
             <div className={styles['actions']}>
                 <a
-                    href='https://www.stremio.com/download-service'
+                    href='https://github.com/ursir1/moxi/releases'
                     target='_blank'
                     rel='noreferrer'
                 >
@@ -99,3 +99,4 @@ const StreamingServerWarning = ({ className }: Props) => {
 };
 
 export default withCoreSuspender(StreamingServerWarning);
+

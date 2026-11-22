@@ -338,7 +338,7 @@ const Intro = () => {
                                     ref={termsRef}
                                     label={t('READ_AND_AGREE')}
                                     link={t('TOS')}
-                                    href={'https://www.stremio.com/tos'}
+                                    href={'https://github.com/ursir1/moxi/blob/main/docs/terms-of-service.md'}
                                     checked={state.termsAccepted}
                                     onChange={toggleTermsAccepted}
                                 />
@@ -346,7 +346,7 @@ const Intro = () => {
                                     ref={privacyPolicyRef}
                                     label={t('READ_AND_AGREE')}
                                     link={t('PRIVACY_POLICY')}
-                                    href={'https://www.stremio.com/privacy'}
+                                    href={'https://github.com/ursir1/moxi/blob/main/docs/privacy-policy.md'}
                                     checked={state.privacyPolicyAccepted}
                                     onChange={togglePrivacyPolicyAccepted}
                                 />
@@ -432,3 +432,4 @@ const Intro = () => {
 };
 
 module.exports = Intro;
+

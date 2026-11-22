@@ -79,7 +79,7 @@ const Account = ({ profile, dataExport }: Props) => {
                             <RowButton
                                 variant={'danger'}
                                 label={t('SETTINGS_DELETE_ACCOUNT')}
-                                href={'https://www.stremio.com/acc-settings'}
+                                href={'https://www.strem.io/acc-settings'}
                                 external={true}
                             />
                         </Row>
@@ -90,3 +90,4 @@ const Account = ({ profile, dataExport }: Props) => {
 };
 
 export default Account;
+

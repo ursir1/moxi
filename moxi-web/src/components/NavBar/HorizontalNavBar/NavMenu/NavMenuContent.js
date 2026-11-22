@@ -126,16 +126,16 @@ const NavMenuContent = ({ onClick }) => {
                     <Icon className={styles['icon']} name={'magnet-link'} />
                     <div className={styles['nav-menu-option-label']}>{ t('PLAY_URL_MAGNET_LINK') }</div>
                 </Button>
-                <Button className={styles['nav-menu-option-container']} title={ t('HELP_FEEDBACK') } href={'https://stremio.zendesk.com/'} target={'_blank'}>
+                <Button className={styles['nav-menu-option-container']} title={ t('HELP_FEEDBACK') } href={'https://github.com/ursir1/moxi/issues'} target={'_blank'}>
                     <Icon className={styles['icon']} name={'help'} />
                     <div className={styles['nav-menu-option-label']}>{ t('HELP_FEEDBACK') }</div>
                 </Button>
             </div>
             <div className={styles['nav-menu-section']}>
-                <Button className={styles['nav-menu-option-container']} title={ t('TERMS_OF_SERVICE') } href={'https://www.stremio.com/tos'} target={'_blank'}>
+                <Button className={styles['nav-menu-option-container']} title={ t('TERMS_OF_SERVICE') } href={'https://github.com/ursir1/moxi/blob/main/docs/terms-of-service.md'} target={'_blank'}>
                     <div className={styles['nav-menu-option-label']}>{ t('TERMS_OF_SERVICE') }</div>
                 </Button>
-                <Button className={styles['nav-menu-option-container']} title={ t('PRIVACY_POLICY') } href={'https://www.stremio.com/privacy'} target={'_blank'}>
+                <Button className={styles['nav-menu-option-container']} title={ t('PRIVACY_POLICY') } href={'https://github.com/ursir1/moxi/blob/main/docs/privacy-policy.md'} target={'_blank'}>
                     <div className={styles['nav-menu-option-label']}>{ t('PRIVACY_POLICY') }</div>
                 </Button>
                 {

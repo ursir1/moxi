@@ -40,7 +40,7 @@ const Help = ({ streamingServer }: Props) => {
     return (
         <React.Fragment>
             <Group title={t('SETTINGS_GROUP_HELP')}>
-                <LinkRow label={t('SETTINGS_SUPPORT')} href={'https://stremio.zendesk.com/hc/en-us'} />
+                <LinkRow label={t('SETTINGS_SUPPORT')} href={'https://github.com/ursir1/moxi/issues'} />
             </Group>
             <Group title={t('ABOUT_STREMIO')}>
                 {
@@ -55,9 +55,9 @@ const Help = ({ streamingServer }: Props) => {
                 </Row>
             </Group>
             <Group title={t('SETTINGS_GROUP_LEGAL')}>
-                <LinkRow label={t('TERMS_OF_SERVICE')} href={'https://www.stremio.com/tos'} />
-                <LinkRow label={t('PRIVACY_POLICY')} href={'https://www.stremio.com/privacy'} />
-                <LinkRow label={t('SETTINGS_SOURCE_CODE')} href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`} />
+                <LinkRow label={t('TERMS_OF_SERVICE')} href={'https://github.com/ursir1/moxi/blob/main/docs/terms-of-service.md'} />
+                <LinkRow label={t('PRIVACY_POLICY')} href={'https://github.com/ursir1/moxi/blob/main/docs/privacy-policy.md'} />
+                <LinkRow label={t('SETTINGS_SOURCE_CODE')} href={'https://github.com/ursir1/moxi'} />
                 <LinkRow label={'Big Buck Bunny © 2008 Blender Foundation · CC BY 3.0'} href={'https://peach.blender.org/about/'} />
             </Group>
         </React.Fragment>
