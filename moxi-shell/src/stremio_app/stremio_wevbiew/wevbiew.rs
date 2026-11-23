@@ -132,7 +132,7 @@ impl PartialUi for WebView {
             .ok();
         let controller_clone = data.controller.clone();
         let endpoint = data.endpoint.clone();
-        let webview_flags = "--autoplay-policy=no-user-gesture-required --disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection";
+        let webview_flags = "--autoplay-policy=no-user-gesture-required --disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection,BlockInsecurePrivateNetworkRequests --disable-web-security --allow-running-insecure-content";
         let result = webview2::EnvironmentBuilder::new()
             .with_additional_browser_arguments(webview_flags)
             .build(move |env| {
@@ -408,3 +408,4 @@ fn same_origin(trusted: &Option<url::Origin>, uri: &str) -> bool {
         None => false,
     }
 }
+
