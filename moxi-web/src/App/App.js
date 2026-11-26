@@ -164,6 +164,50 @@ const App = () => {
         };
     }, [core.transport]);
 
+    const prebuiltAddonsCheckedRef = React.useRef(false);
+    React.useEffect(() => {
+        if (!profile || !profile.addons || prebuiltAddonsCheckedRef.current) {
+            return;
+        }
+
+        prebuiltAddonsCheckedRef.current = true;
+        const PREBUILT_ADDONS = [
+            {
+                id: 'com.nuvio.tmdb.catalogs',
+                url: 'https://catalog.nuvio.tv/manifest.json'
+            },
+            {
+                id: 'community.animestream',
+                url: 'https://animestream-addon.keypop3750.workers.dev/manifest.json'
+            }
+        ];
+
+        PREBUILT_ADDONS.forEach(({ id, url }) => {
+            const alreadyInstalled = profile.addons.some(
+                (addon) => addon.transportUrl === url || addon.manifest?.id === id
+            );
+            if (!alreadyInstalled) {
+                fetch(url)
+                    .then((res) => res.json())
+                    .then((manifest) => {
+                        core.transport.dispatch({
+                            action: 'Ctx',
+                            args: {
+                                action: 'InstallAddon',
+                                args: {
+                                    transportUrl: url,
+                                    manifest: manifest,
+                                }
+                            }
+                        });
+                    })
+                    .catch((err) => {
+                        console.warn(`Could not auto-install ${id}:`, err);
+                    });
+            }
+        });
+    }, [profile?.addons, core.transport]);
+
     return (
         <ServicesProvider services={services}>
             <ToastProvider className={styles['toasts-container']}>

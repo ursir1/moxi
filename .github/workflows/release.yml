@@ -39,6 +39,12 @@ jobs:
           pnpm install --no-frozen-lockfile
           pnpm build
 
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-pc-windows-msvc
+
       - name: Determine Next Version
         id: release_info
         shell: pwsh
@@ -85,22 +91,23 @@ jobs:
           "TAG=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           Write-Host "Determined Version: $nextVersion (Tag: $tag)"
 
-          # Update Cargo.toml
-          (Get-Content "moxi-shell/Cargo.toml" -Raw) -replace 'version\s*=\s*"\d+\.\d+\.\d+"', "version = `"$nextVersion`"" | Set-Content "moxi-shell/Cargo.toml" -NoNewline
+          # Update Cargo.toml as clean UTF-8 without BOM
+          $cargoPath = "moxi-shell/Cargo.toml"
+          $content = (Get-Content $cargoPath -Raw) -replace 'version\s*=\s*"\d+\.\d+\.\d+"', "version = `"$nextVersion`""
+          [System.IO.File]::WriteAllText((Resolve-Path $cargoPath).Path, $content, (New-Object System.Text.UTF8Encoding($false)))
           Write-Host "Updated moxi-shell/Cargo.toml to version $nextVersion"
+
+          # Update Cargo.lock
+          Set-Location moxi-shell
+          cargo update -p moxi-shell
+          Set-Location ..
 
           # Commit bumped Cargo.toml back to repository
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add moxi-shell/Cargo.toml
+          git add moxi-shell/Cargo.toml moxi-shell/Cargo.lock
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-bump version to $nextVersion [skip ci]"
           git push origin main || Write-Host "Push skipped or already up to date"
-
-      - name: Setup Rust Toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: stable
-          target: x86_64-pc-windows-msvc
 
       - name: Build Native Shell (moxi-shell)
         working-directory: moxi-shell
