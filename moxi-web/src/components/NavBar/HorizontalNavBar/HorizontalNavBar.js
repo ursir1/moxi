@@ -8,20 +8,43 @@ const { default: Icon } = require('@stremio/stremio-icons/react');
 const { Button, Image } = require('stremio/components');
 const { useFullscreen } = require('stremio/common/Fullscreen');
 const { useHorizontalNavGamepadNavigation } = require('stremio/services/GamepadNavigation');
+const useProfile = require('stremio/common/useProfile');
 const SearchBar = require('./SearchBar');
 const NavMenu = require('./NavMenu');
 const styles = require('./styles');
 const { t } = require('i18next');
 
 const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, originPath, onBackButtonClick, hdrInfo, ...props }) => {
+    const profile = useProfile();
     const goBack = useGoBack(originPath);
     const [fullscreen, requestFullscreen, exitFullscreen, , supported] = useFullscreen();
+    const avatar = React.useMemo(() => {
+        if (!profile || !profile.auth) {
+            return null;
+        }
+        return profile.auth.user && profile.auth.user.avatar ?
+            profile.auth.user.avatar :
+            require('/assets/images/default_avatar.png');
+    }, [profile]);
     const renderNavMenuLabel = React.useCallback(({ ref, className, onClick, children, }) => (
-        <Button ref={ref} className={classnames(className, styles['button-container'], styles['menu-button-container'])} tabIndex={-1} onClick={onClick}>
-            <Icon className={styles['icon']} name={'person-outline'} />
+        <Button
+            ref={ref}
+            className={classnames(className, styles['button-container'], styles['menu-button-container'], { [styles['with-avatar']]: !!avatar })}
+            tabIndex={-1}
+            onClick={onClick}
+        >
+            {
+                avatar ?
+                    <div
+                        className={styles['nav-avatar']}
+                        style={{ backgroundImage: `url('${avatar}')` }}
+                    />
+                    :
+                    <Icon className={styles['icon']} name={'person-outline'} />
+            }
             {children}
         </Button>
-    ), []);
+    ), [avatar]);
     useHorizontalNavGamepadNavigation(route || className, backButton ? goBack : undefined);
     return (
         <nav {...props} className={classnames(className, styles['horizontal-nav-bar-container'])}>
