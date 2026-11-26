@@ -78,7 +78,7 @@ jobs:
             $nextVersion = "$($latest.Major).$($latest.Minor).$($latest.Build + 1)"
           } else {
             $cargoContent = Get-Content "moxi-shell/Cargo.toml" -Raw
-            if ($cargoContent -match 'version\s*=\s*"(\d+\.\d+\.\d+)"') {
+            if ($cargoContent -match '\[package\][\r\n]+name\s*=\s*"moxi-shell"[\r\n]+version\s*=\s*"(\d+\.\d+\.\d+)"') {
               $cur = [version]$matches[1]
               $nextVersion = "$($cur.Major).$($cur.Minor).$($cur.Build + 1)"
             } else {
@@ -91,9 +91,10 @@ jobs:
           "TAG=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           Write-Host "Determined Version: $nextVersion (Tag: $tag)"
 
-          # Update Cargo.toml as clean UTF-8 without BOM
+          # Update Cargo.toml ONLY under [package] section
           $cargoPath = "moxi-shell/Cargo.toml"
-          $content = (Get-Content $cargoPath -Raw) -replace 'version\s*=\s*"\d+\.\d+\.\d+"', "version = `"$nextVersion`""
+          $content = Get-Content $cargoPath -Raw
+          $content = $content -replace '(?ms)(\[package\][\r\n]+name\s*=\s*"moxi-shell"[\r\n]+version\s*=\s*)"[^"]+"', "`$1`"$nextVersion`""
           [System.IO.File]::WriteAllText((Resolve-Path $cargoPath).Path, $content, (New-Object System.Text.UTF8Encoding($false)))
           Write-Host "Updated moxi-shell/Cargo.toml to version $nextVersion"
 
@@ -102,7 +103,7 @@ jobs:
           cargo update -p moxi-shell
           Set-Location ..
 
-          # Commit bumped Cargo.toml back to repository
+          # Commit bumped files back to repository
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add moxi-shell/Cargo.toml moxi-shell/Cargo.lock
