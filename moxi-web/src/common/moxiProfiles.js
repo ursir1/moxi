@@ -3,40 +3,40 @@ const React = require('react');
 
 const PRESET_AVATARS = [
     {
+        id: 'shadow_red',
+        name: 'Shadow Dark',
+        accent: '#EF4444',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_sh" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#7f1d1d"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_sh)"/><path d="M22,25 C26,15 40,32 50,42 C60,32 74,15 78,25 C82,38 72,55 70,68 C68,78 62,88 50,88 C38,88 32,78 30,68 C28,55 18,38 22,25 Z" fill="#18181b"/><polygon points="35,28 50,45 65,28" fill="#dc2626"/><circle cx="42" cy="52" r="5" fill="#facc15"/><circle cx="58" cy="52" r="5" fill="#facc15"/><circle cx="42" cy="52" r="2.5" fill="#dc2626"/><circle cx="58" cy="52" r="2.5" fill="#dc2626"/><ellipse cx="50" cy="62" rx="12" ry="7" fill="#f4f4f5"/></svg>'
+    },
+    {
+        id: 'pirate_straw',
+        name: 'Straw Pirate',
+        accent: '#F59E0B',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_pir" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_pir)"/><ellipse cx="50" cy="42" rx="40" ry="14" fill="#d97706"/><ellipse cx="50" cy="38" rx="22" ry="16" fill="#f59e0b"/><rect x="28" y="36" width="44" height="6" fill="#dc2626"/><ellipse cx="50" cy="60" rx="20" ry="18" fill="#fef3c7"/><circle cx="42" cy="58" r="5" fill="#18181b"/><circle cx="58" cy="58" r="5" fill="#18181b"/><polygon points="50,64 47,68 53,68" fill="#18181b"/><rect x="42" y="72" width="16" height="4" rx="2" fill="#18181b"/></svg>'
+    },
+    {
+        id: 'cat_orange',
+        name: 'Curious Cat',
+        accent: '#06B6D4',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_cat" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#164e63"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_cat)"/><polygon points="25,28 35,50 18,48" fill="#ea580c"/><polygon points="75,28 65,50 82,48" fill="#ea580c"/><ellipse cx="50" cy="58" rx="28" ry="24" fill="#f97316"/><circle cx="38" cy="52" r="9" fill="#facc15"/><circle cx="62" cy="52" r="9" fill="#facc15"/><ellipse cx="38" cy="52" rx="4" ry="7" fill="#0f172a"/><ellipse cx="62" cy="52" rx="4" ry="7" fill="#0f172a"/><polygon points="50,62 46,66 54,66" fill="#fda4af"/><path d="M46,68 Q50,71 54,68" stroke="#0f172a" stroke-width="2" fill="none"/></svg>'
+    },
+    {
+        id: 'kids_purple',
+        name: 'Kids Wonder',
+        accent: '#A855F7',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_kid" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9333ea"/><stop offset="100%" stop-color="#3b0764"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_kid)"/><ellipse cx="50" cy="55" rx="24" ry="26" fill="#fed7aa"/><path d="M26,45 C28,26 40,24 50,24 C60,24 72,26 74,45 C70,36 58,35 50,36 C42,35 30,36 26,45 Z" fill="#27272a"/><ellipse cx="40" cy="54" rx="5" ry="6" fill="#18181b"/><ellipse cx="60" cy="54" rx="5" ry="6" fill="#18181b"/><circle cx="42" cy="52" r="2" fill="#ffffff"/><circle cx="62" cy="52" r="2" fill="#ffffff"/><ellipse cx="50" cy="68" rx="5" ry="4" fill="#e11d48"/></svg>'
+    },
+    {
         id: 'moxi_neon',
         name: 'Moxi Emerald',
         accent: '#2FBF71',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1b3829"/><stop offset="100%" stop-color="#0a120e"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#g1)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#2FBF71" stroke-width="2.5"/><polygon points="32,68 50,30 68,68 50,55" fill="#2FBF71"/><polygon points="50,30 68,68 60,68 50,45 40,68 32,68" fill="#F2B51D"/></svg>'
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1b3829"/><stop offset="100%" stop-color="#0a120e"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g1)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#2FBF71" stroke-width="3"/><polygon points="34,68 50,32 66,68 50,56" fill="#2FBF71"/><polygon points="50,32 66,68 58,68 50,46 42,68 34,68" fill="#F2B51D"/></svg>'
     },
     {
         id: 'gold_crown',
         name: 'Gold Crown',
         accent: '#F2B51D',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#36290e"/><stop offset="100%" stop-color="#0f0c05"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#g2)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#F2B51D" stroke-width="2.5"/><polygon points="26,64 30,36 44,50 50,30 56,50 70,36 74,64" fill="#F2B51D"/><circle cx="50" cy="27" r="3.5" fill="#2FBF71"/><circle cx="30" cy="33" r="3" fill="#2FBF71"/><circle cx="70" cy="33" r="3" fill="#2FBF71"/></svg>'
-    },
-    {
-        id: 'cyber_cyan',
-        name: 'Cyber Cyan',
-        accent: '#00E5FF',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g3" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0e2a33"/><stop offset="100%" stop-color="#061014"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#g3)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#00E5FF" stroke-width="2.5"/><circle cx="50" cy="40" r="18" fill="#00E5FF" opacity="0.9"/><path d="M24,84 C26,64 40,62 50,62 C60,62 74,64 76,84" fill="#00E5FF" opacity="0.8"/></svg>'
-    },
-    {
-        id: 'cinema_play',
-        name: 'Cinema Ruby',
-        accent: '#FF3366',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g4" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#38101a"/><stop offset="100%" stop-color="#120407"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#g4)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#FF3366" stroke-width="2.5"/><polygon points="40,32 72,50 40,68" fill="#FF3366"/></svg>'
-    },
-    {
-        id: 'galaxy_violet',
-        name: 'Galaxy Violet',
-        accent: '#A855F7',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g5" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2c1445"/><stop offset="100%" stop-color="#0e0517"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#g5)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#A855F7" stroke-width="2.5"/><polygon points="50,22 58,38 76,40 62,53 66,71 50,62 34,71 38,53 24,40 42,38" fill="#A855F7"/></svg>'
-    },
-    {
-        id: 'stealth_ninja',
-        name: 'Stealth Shadow',
-        accent: '#10B981',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g6" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#132620"/><stop offset="100%" stop-color="#080e0c"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#g6)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#10B981" stroke-width="2.5"/><rect x="26" y="42" width="48" height="14" rx="7" fill="#10B981"/><circle cx="38" cy="49" r="3.5" fill="#080e0c"/><circle cx="62" cy="49" r="3.5" fill="#080e0c"/></svg>'
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#36290e"/><stop offset="100%" stop-color="#0f0c05"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g2)"/><polygon points="26,64 30,36 44,50 50,30 56,50 70,36 74,64" fill="#F2B51D"/><circle cx="50" cy="27" r="3.5" fill="#2FBF71"/><circle cx="30" cy="33" r="3" fill="#2FBF71"/><circle cx="70" cy="33" r="3" fill="#2FBF71"/></svg>'
     }
 ];
 
@@ -57,8 +57,15 @@ const STORAGE_PROFILES_KEY = 'moxi_profiles';
 const STORAGE_ACTIVE_KEY = 'moxi_active_profile_id';
 const EVENT_NAME = 'moxi-profile-changed';
 
+const INITIAL_DEFAULT_PROFILES = [
+    { id: 'prof_khadar', name: 'Khadar', avatar: 'pirate_straw', isKid: false, isDefault: true },
+    { id: 'prof_malik', name: 'Malik Oskar', avatar: 'shadow_red', isKid: false, isDefault: false },
+    { id: 'prof_faiza', name: 'Faiza', avatar: 'cat_orange', isKid: false, isDefault: false },
+    { id: 'prof_kids', name: 'Kids', avatar: 'kids_purple', isKid: true, isDefault: false }
+];
+
 function getProfiles() {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === 'undefined') return INITIAL_DEFAULT_PROFILES;
     try {
         const raw = localStorage.getItem(STORAGE_PROFILES_KEY);
         if (raw) {
@@ -68,21 +75,14 @@ function getProfiles() {
     } catch (_e) {
         // use default profile
     }
-    // Default initial profile
-    const defaultProfile = {
-        id: 'profile_default',
-        name: 'Primary',
-        avatar: 'moxi_neon',
-        isDefault: true,
-        createdAt: Date.now()
-    };
+
     try {
-        localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify([defaultProfile]));
-        localStorage.setItem(STORAGE_ACTIVE_KEY, defaultProfile.id);
+        localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(INITIAL_DEFAULT_PROFILES));
+        localStorage.setItem(STORAGE_ACTIVE_KEY, INITIAL_DEFAULT_PROFILES[0].id);
     } catch (_e) {
         // storage quota exceeded or unavailable
     }
-    return [defaultProfile];
+    return INITIAL_DEFAULT_PROFILES;
 }
 
 function getActiveProfile() {

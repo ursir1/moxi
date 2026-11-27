@@ -13,6 +13,7 @@ const SearchParamsHandler = require('./SearchParamsHandler');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const { default: ShellOpenHandler } = require('./ShellOpenHandler');
 const { default: UpdaterBanner } = require('./UpdaterBanner');
+const MoxiProfileScreen = require('stremio/components/MoxiProfileScreen');
 const { default: ShortcutsModal } = require('./ShortcutsModal');
 const { default: GamepadModal } = require('./GamepadModal');
 const { default: useInterfaceScale } = require('./useInterfaceScale');
@@ -206,7 +207,7 @@ const App = () => {
                     });
             }
         });
-    }, [profile?.addons, core.transport]);
+    }, [profile, core.transport]);
 
     return (
         <ServicesProvider services={services}>
@@ -228,6 +229,7 @@ const App = () => {
                                     <ShellOpenHandler />
                                     <UpdaterBanner className={styles['updater-banner-container']} />
                                     <ProtectedRoutes />
+                                    <MoxiProfileScreen />
                                 </DiscordProvider>
                             </FullscreenProvider>
                         </ShortcutsProvider>

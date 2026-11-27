@@ -112,8 +112,7 @@ const NavMenuContent = ({ onClick }) => {
                     title="Who is Watching? (Switch Profile)"
                     onClick={(e) => {
                         e.stopPropagation();
-                        setProfileModalMode('switch');
-                        setProfileModalOpen(true);
+                        window.dispatchEvent(new CustomEvent('moxi-open-profile-screen'));
                     }}
                 >
                     <Icon className={styles['icon']} name={'person-outline'} style={{ color: '#2FBF71' }} />

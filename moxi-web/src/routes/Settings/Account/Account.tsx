@@ -62,7 +62,7 @@ const Account = ({ profile, dataExport }: Props) => {
             </Group>
             <Group title="Moxi Profiles & Avatars">
                 <Row rowId={'moxi_profiles'} label="Multi-Profiles" description="Switch between different viewer profiles or create a new profile." stackOnPhone={true}>
-                    <RowButton label="Switch Profile" onClick={() => { setModalMode('switch'); setModalOpen(true); }} />
+                    <RowButton label="Switch Profile" onClick={() => window.dispatchEvent(new CustomEvent('moxi-open-profile-screen'))} />
                 </Row>
                 <Row rowId={'moxi_avatar'} label="Custom Avatar" description="Choose from neon avatar presets or upload your own profile photo." stackOnPhone={true}>
                     <RowButton label="Change Avatar" onClick={() => { setModalMode('avatar'); setModalOpen(true); }} />
