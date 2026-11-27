@@ -11,7 +11,6 @@ const { Button } = require('stremio/components');
 const { useFullscreen } = require('stremio/common/Fullscreen');
 const useProfile = require('stremio/common/useProfile');
 const { useMoxiProfile, resolveAvatarUrl } = require('stremio/common/moxiProfiles');
-const MoxiProfileModal = require('stremio/components/MoxiProfileModal');
 const usePWA = require('stremio/common/usePWA');
 const { default: useInstallPrompt } = require('stremio/common/useInstallPrompt');
 const { default: usePlayUrl } = require('stremio/common/usePlayUrl');
@@ -26,8 +25,6 @@ const NavMenuContent = ({ onClick }) => {
     const core = useCore();
     const profile = useProfile();
     const { activeProfile } = useMoxiProfile();
-    const [profileModalOpen, setProfileModalOpen] = React.useState(false);
-    const [profileModalMode, setProfileModalMode] = React.useState('switch');
     const streamingServer = useStreamingServer();
     const { handlePlayUrl } = usePlayUrl();
     const toast = useToast();
@@ -86,10 +83,8 @@ const NavMenuContent = ({ onClick }) => {
                         cursor: 'pointer'
                     }}
                     title="Change Avatar"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setProfileModalMode('avatar');
-                        setProfileModalOpen(true);
+                    onClick={() => {
+                        window.dispatchEvent(new CustomEvent('moxi-open-avatar-modal'));
                     }}
                 />
                 <div className={styles['user-info-details']}>
@@ -123,10 +118,8 @@ const NavMenuContent = ({ onClick }) => {
                 <Button
                     className={styles['nav-menu-option-container']}
                     title="Customize Profile Avatar"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setProfileModalMode('avatar');
-                        setProfileModalOpen(true);
+                    onClick={() => {
+                        window.dispatchEvent(new CustomEvent('moxi-open-avatar-modal'));
                     }}
                 >
                     <Icon className={styles['icon']} name={'edit'} style={{ color: '#F2B51D' }} />
@@ -194,11 +187,6 @@ const NavMenuContent = ({ onClick }) => {
                         null
                 }
             </div>
-            <MoxiProfileModal
-                isOpen={profileModalOpen}
-                initialMode={profileModalMode}
-                onClose={() => setProfileModalOpen(false)}
-            />
         </div>
     );
 };

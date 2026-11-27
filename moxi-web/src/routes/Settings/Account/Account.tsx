@@ -1,13 +1,12 @@
 // Copyright (C) 2017-2026 Smart code 203358507
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCore } from 'stremio/core';
 import { Group, Row, RowButton } from '../components';
 import getAvatar from '../getAvatar';
 import styles from './Account.less';
 const { useMoxiProfile } = require('stremio/common/moxiProfiles');
-const MoxiProfileModal = require('stremio/components/MoxiProfileModal');
 
 type Props = {
     profile: Profile,
@@ -21,8 +20,6 @@ const Account = ({ profile, dataExport }: Props) => {
     const { t } = useTranslation();
     const core = useCore();
     const { activeProfile } = useMoxiProfile();
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState<'switch' | 'avatar'>('switch');
 
     const avatar = useMemo(() => getAvatar(profile.auth), [profile.auth, activeProfile]);
 
@@ -39,7 +36,7 @@ const Account = ({ profile, dataExport }: Props) => {
         <React.Fragment>
             <Group>
                 <div className={styles['identity']}>
-                    <div className={styles['avatar']} style={{ backgroundImage: avatar, cursor: 'pointer' }} onClick={() => { setModalMode('avatar'); setModalOpen(true); }} title="Change Avatar" />
+                    <div className={styles['avatar']} style={{ backgroundImage: avatar, cursor: 'pointer' }} onClick={() => window.dispatchEvent(new CustomEvent('moxi-open-avatar-modal'))} title="Change Avatar" />
                     <div className={styles['text']}>
                         <div className={styles['name']} style={{ color: '#2FBF71', fontWeight: 700 }} title={activeProfile?.name || 'Primary Profile'}>
                             {activeProfile?.name || 'Primary Profile'}
@@ -65,7 +62,7 @@ const Account = ({ profile, dataExport }: Props) => {
                     <RowButton label="Switch Profile" onClick={() => window.dispatchEvent(new CustomEvent('moxi-open-profile-screen'))} />
                 </Row>
                 <Row rowId={'moxi_avatar'} label="Custom Avatar" description="Choose from neon avatar presets or upload your own profile photo." stackOnPhone={true}>
-                    <RowButton label="Change Avatar" onClick={() => { setModalMode('avatar'); setModalOpen(true); }} />
+                    <RowButton label="Change Avatar" onClick={() => window.dispatchEvent(new CustomEvent('moxi-open-avatar-modal'))} />
                 </Row>
             </Group>
             {
@@ -101,11 +98,6 @@ const Account = ({ profile, dataExport }: Props) => {
                         </Row>
                     </Group>
             }
-            <MoxiProfileModal
-                isOpen={modalOpen}
-                initialMode={modalMode}
-                onClose={() => setModalOpen(false)}
-            />
         </React.Fragment>
     );
 };

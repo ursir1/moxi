@@ -14,6 +14,7 @@ const DeepLinkHandler = require('./DeepLinkHandler');
 const { default: ShellOpenHandler } = require('./ShellOpenHandler');
 const { default: UpdaterBanner } = require('./UpdaterBanner');
 const MoxiProfileScreen = require('stremio/components/MoxiProfileScreen');
+const MoxiProfileModal = require('stremio/components/MoxiProfileModal');
 const { default: ShortcutsModal } = require('./ShortcutsModal');
 const { default: GamepadModal } = require('./GamepadModal');
 const { default: useInterfaceScale } = require('./useInterfaceScale');
@@ -41,6 +42,15 @@ const App = () => {
     }, []);
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
+    const [avatarModalOpen, setAvatarModalOpen] = React.useState(false);
+
+    React.useEffect(() => {
+        const onOpenAvatar = () => {
+            setAvatarModalOpen(true);
+        };
+        window.addEventListener('moxi-open-avatar-modal', onOpenAvatar);
+        return () => window.removeEventListener('moxi-open-avatar-modal', onOpenAvatar);
+    }, []);
 
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
@@ -230,6 +240,10 @@ const App = () => {
                                     <UpdaterBanner className={styles['updater-banner-container']} />
                                     <ProtectedRoutes />
                                     <MoxiProfileScreen />
+                                    <MoxiProfileModal
+                                        isOpen={avatarModalOpen}
+                                        onClose={() => setAvatarModalOpen(false)}
+                                    />
                                 </DiscordProvider>
                             </FullscreenProvider>
                         </ShortcutsProvider>
