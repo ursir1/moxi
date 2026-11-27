@@ -364,14 +364,22 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                             />
 
                             <div className={styles['input-group']}>
-                                <label className={styles['label']}>Profile Name</label>
+                                <label className={styles['label']}>
+                                    Profile Name {editingProfile.isLocked ? <span style={{ color: '#F2B51D', fontSize: '0.8rem' }}>(Prebuilt - Name Locked)</span> : null}
+                                </label>
                                 <input
                                     className={styles['text-field']}
                                     type="text"
                                     placeholder="Enter profile name..."
                                     value={editingProfile.name}
-                                    onChange={(e) => setEditingProfile({ ...editingProfile, name: e.target.value })}
-                                    autoFocus
+                                    disabled={editingProfile.isLocked}
+                                    style={editingProfile.isLocked ? { opacity: 0.65, cursor: 'not-allowed' } : {}}
+                                    onChange={(e) => {
+                                        if (!editingProfile.isLocked) {
+                                            setEditingProfile({ ...editingProfile, name: e.target.value });
+                                        }
+                                    }}
+                                    autoFocus={!editingProfile.isLocked}
                                 />
                             </div>
 
@@ -380,9 +388,14 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                                     <input
                                         type="checkbox"
                                         checked={!!editingProfile.isKid}
-                                        onChange={(e) => setEditingProfile({ ...editingProfile, isKid: e.target.checked })}
+                                        disabled={editingProfile.isLocked && editingProfile.id === 'prof_kids'}
+                                        onChange={(e) => {
+                                            if (!editingProfile.isLocked || editingProfile.id !== 'prof_kids') {
+                                                setEditingProfile({ ...editingProfile, isKid: e.target.checked });
+                                            }
+                                        }}
                                     />
-                                    <span>Kids Profile (Kids badge & family safe)</span>
+                                    <span>Kids Profile (Kids badge & safe filters)</span>
                                 </label>
                             </div>
 
@@ -416,7 +429,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                         </div>
 
                         <div className={styles['editor-footer']}>
-                            {!isCreatingNew && profiles.length > 1 && (
+                            {!isCreatingNew && !editingProfile.isLocked && !editingProfile.isDefault && (
                                 <button
                                     className={styles['delete-btn']}
                                     onClick={() => {

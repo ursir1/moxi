@@ -14,7 +14,7 @@ const { default: useScrolledPast } = require('./Spotlight/useScrolledPast');
 const styles = require('./styles');
 const { default: StreamingServerWarning } = require('./StreamingServerWarning');
 const { default: RemoteNotification } = require('stremio/components/RemoteNotification');
-const { useMoxiProfile, getProfileWatchedIds } = require('stremio/common/moxiProfiles');
+const { useMoxiProfile, getProfileWatchedIds, isKidSafeItem } = require('stremio/common/moxiProfiles');
 
 const THRESHOLD = 5;
 
@@ -51,7 +51,14 @@ const Board = () => {
         items: (Array.isArray(liveTvContinueWatching.items) ? liveTvContinueWatching.items : [])
             .map((item) => ({ ...item, posterShape: 'landscape' })),
     }), [liveTvContinueWatching.items]);
-    const spotlightItems = board.spotlight?.type === 'Ready' ? board.spotlight.content : [];
+    const isKid = !!activeProfile?.isKid;
+    const spotlightItems = React.useMemo(() => {
+        const raw = board.spotlight?.type === 'Ready' && Array.isArray(board.spotlight.content) ? board.spotlight.content : [];
+        if (isKid) {
+            return raw.filter(isKidSafeItem);
+        }
+        return raw;
+    }, [board.spotlight, isKid]);
     const spotlightVisible = spotlightItems.length > 0 || board.spotlight?.type === 'Loading';
     const boardCatalogsOffset =
         (spotlightVisible ? 1 : 0) +
@@ -62,8 +69,25 @@ const Board = () => {
             isNaN(profile.settings.streamingServerWarningDismissed.getTime()) ||
             profile.settings.streamingServerWarningDismissed.getTime() < Date.now());
     }, [profile.settings, streamingServer.settings]);
+    const filteredCatalogs = React.useMemo(() => {
+        if (!isKid || !Array.isArray(board.catalogs)) {
+            return board.catalogs;
+        }
+        return board.catalogs.map((catalog) => {
+            if (catalog.content?.type === 'Ready' && Array.isArray(catalog.content.items)) {
+                return {
+                    ...catalog,
+                    content: {
+                        ...catalog.content,
+                        items: catalog.content.items.filter(isKidSafeItem)
+                    }
+                };
+            }
+            return catalog;
+        });
+    }, [board.catalogs, isKid]);
     const { catalogRows, scrollContainerRef, onScroll } = useVisibleCatalogs({
-        catalogs: board.catalogs,
+        catalogs: filteredCatalogs,
         loadRange: loadBoardRows,
         leadingRows: boardCatalogsOffset,
         preloadRows: THRESHOLD,
@@ -73,7 +97,7 @@ const Board = () => {
     return (
         <div className={styles['board-container']}>
             <EventModal />
-            <RemoteNotification catalogs={board.catalogs} watching={profileContinueWatching.items} />
+            <RemoteNotification catalogs={filteredCatalogs} watching={profileContinueWatching.items} />
             <MainNavBars className={classnames(styles['board-content-container'], { [styles['with-spotlight']]: spotlightVisible, [styles['scrolled']]: scrolledPastSpotlight })} route={'board'}>
                 <div ref={scrollContainerRef} className={styles['board-content']} onScroll={onScroll}>
                     {

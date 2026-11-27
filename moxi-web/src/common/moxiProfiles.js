@@ -9,6 +9,18 @@ const PRESET_AVATARS = [
         svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_pir" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_pir)"/><ellipse cx="50" cy="42" rx="40" ry="14" fill="#d97706"/><ellipse cx="50" cy="38" rx="22" ry="16" fill="#f59e0b"/><rect x="28" y="36" width="44" height="6" fill="#dc2626"/><ellipse cx="50" cy="60" rx="20" ry="18" fill="#fef3c7"/><circle cx="42" cy="58" r="5" fill="#18181b"/><circle cx="58" cy="58" r="5" fill="#18181b"/><polygon points="50,64 47,68 53,68" fill="#18181b"/><rect x="42" y="72" width="16" height="4" rx="2" fill="#18181b"/></svg>'
     },
     {
+        id: 'gold_crown',
+        name: 'Family Crown',
+        accent: '#F2B51D',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#36290e"/><stop offset="100%" stop-color="#0f0c05"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g2)"/><polygon points="26,64 30,36 44,50 50,30 56,50 70,36 74,64" fill="#F2B51D"/><circle cx="50" cy="27" r="3.5" fill="#2FBF71"/><circle cx="30" cy="33" r="3" fill="#2FBF71"/><circle cx="70" cy="33" r="3" fill="#2FBF71"/></svg>'
+    },
+    {
+        id: 'kids_purple',
+        name: 'Kids Wonder',
+        accent: '#A855F7',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_kid" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9333ea"/><stop offset="100%" stop-color="#3b0764"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_kid)"/><ellipse cx="50" cy="55" rx="24" ry="26" fill="#fed7aa"/><path d="M26,45 C28,26 40,24 50,24 C60,24 72,26 74,45 C70,36 58,35 50,36 C42,35 30,36 26,45 Z" fill="#27272a"/><ellipse cx="40" cy="54" rx="5" ry="6" fill="#18181b"/><ellipse cx="60" cy="54" rx="5" ry="6" fill="#18181b"/><circle cx="42" cy="52" r="2" fill="#ffffff"/><circle cx="62" cy="52" r="2" fill="#ffffff"/><ellipse cx="50" cy="68" rx="5" ry="4" fill="#e11d48"/></svg>'
+    },
+    {
         id: 'shadow_red',
         name: 'Shadow Dark',
         accent: '#EF4444',
@@ -21,22 +33,10 @@ const PRESET_AVATARS = [
         svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_cat" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#164e63"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_cat)"/><polygon points="25,28 35,50 18,48" fill="#ea580c"/><polygon points="75,28 65,50 82,48" fill="#ea580c"/><ellipse cx="50" cy="58" rx="28" ry="24" fill="#f97316"/><circle cx="38" cy="52" r="9" fill="#facc15"/><circle cx="62" cy="52" r="9" fill="#facc15"/><ellipse cx="38" cy="52" rx="4" ry="7" fill="#0f172a"/><ellipse cx="62" cy="52" rx="4" ry="7" fill="#0f172a"/><polygon points="50,62 46,66 54,66" fill="#fda4af"/><path d="M46,68 Q50,71 54,68" stroke="#0f172a" stroke-width="2" fill="none"/></svg>'
     },
     {
-        id: 'kids_purple',
-        name: 'Kids Wonder',
-        accent: '#A855F7',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_kid" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9333ea"/><stop offset="100%" stop-color="#3b0764"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_kid)"/><ellipse cx="50" cy="55" rx="24" ry="26" fill="#fed7aa"/><path d="M26,45 C28,26 40,24 50,24 C60,24 72,26 74,45 C70,36 58,35 50,36 C42,35 30,36 26,45 Z" fill="#27272a"/><ellipse cx="40" cy="54" rx="5" ry="6" fill="#18181b"/><ellipse cx="60" cy="54" rx="5" ry="6" fill="#18181b"/><circle cx="42" cy="52" r="2" fill="#ffffff"/><circle cx="62" cy="52" r="2" fill="#ffffff"/><ellipse cx="50" cy="68" rx="5" ry="4" fill="#e11d48"/></svg>'
-    },
-    {
         id: 'moxi_neon',
         name: 'Moxi Emerald',
         accent: '#2FBF71',
         svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1b3829"/><stop offset="100%" stop-color="#0a120e"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g1)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#2FBF71" stroke-width="3"/><polygon points="34,68 50,32 66,68 50,56" fill="#2FBF71"/><polygon points="50,32 66,68 58,68 50,46 42,68 34,68" fill="#F2B51D"/></svg>'
-    },
-    {
-        id: 'gold_crown',
-        name: 'Gold Crown',
-        accent: '#F2B51D',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#36290e"/><stop offset="100%" stop-color="#0f0c05"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g2)"/><polygon points="26,64 30,36 44,50 50,30 56,50 70,36 74,64" fill="#F2B51D"/><circle cx="50" cy="27" r="3.5" fill="#2FBF71"/><circle cx="30" cy="33" r="3" fill="#2FBF71"/><circle cx="70" cy="33" r="3" fill="#2FBF71"/></svg>'
     }
 ];
 
@@ -59,55 +59,91 @@ const STORAGE_WATCHED_PREFIX = 'moxi_profile_watched_';
 const EVENT_NAME = 'moxi-profile-changed';
 const WATCHED_EVENT_NAME = 'moxi-profile-watched-changed';
 
-const DEMO_IDS = new Set([
-    'prof_khadar',
-    'prof_malik',
-    'prof_faiza',
-    'prof_kids',
-    'prof_main',
-    'prof_family',
-    'prof_guest'
-]);
-
-function createInitialProfile(accountName) {
-    const name = (typeof accountName === 'string' && accountName.trim().length > 0) ?
+function getPrebuiltProfiles(accountName) {
+    const primaryName = (typeof accountName === 'string' && accountName.trim().length > 0) ?
         accountName.trim() :
         'My Profile';
-    return {
-        id: 'prof_primary',
-        name: name,
-        avatar: 'pirate_straw',
-        isKid: false,
-        isDefault: true
-    };
+    return [
+        {
+            id: 'prof_primary',
+            name: primaryName,
+            avatar: 'pirate_straw',
+            isKid: false,
+            isDefault: true,
+            isLocked: false
+        },
+        {
+            id: 'prof_family',
+            name: 'Family',
+            avatar: 'gold_crown',
+            isKid: false,
+            isDefault: false,
+            isLocked: true
+        },
+        {
+            id: 'prof_kids',
+            name: 'Kids',
+            avatar: 'kids_purple',
+            isKid: true,
+            isDefault: false,
+            isLocked: true
+        }
+    ];
 }
 
 function getProfiles() {
-    if (typeof window === 'undefined') return [createInitialProfile()];
+    const prebuilt = getPrebuiltProfiles();
+    if (typeof window === 'undefined') return prebuilt;
     try {
         const raw = localStorage.getItem(STORAGE_PROFILES_KEY);
         if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed) && parsed.length > 0) {
-                // Filter out any old hardcoded demo dummy profiles
-                const filtered = parsed.filter((p) => !DEMO_IDS.has(p.id) && p.name !== 'Khadar' && p.name !== 'Malik Oskar');
-                if (filtered.length > 0) {
-                    return filtered;
+                // Filter out any stale dummy names from initial demos
+                const cleaned = parsed.filter((p) => p.name !== 'Khadar' && p.name !== 'Malik Oskar' && p.name !== 'Faiza' && p.id !== 'prof_khadar' && p.id !== 'prof_malik' && p.id !== 'prof_faiza');
+
+                // Ensure Family profile exists and has locked name
+                let familyProf = cleaned.find((p) => p.id === 'prof_family' || p.name === 'Family');
+                if (!familyProf) {
+                    familyProf = prebuilt[1];
+                    cleaned.push(familyProf);
+                } else {
+                    familyProf.id = 'prof_family';
+                    familyProf.name = 'Family';
+                    familyProf.isLocked = true;
                 }
+
+                // Ensure Kids profile exists and has locked name + isKid
+                let kidsProf = cleaned.find((p) => p.id === 'prof_kids' || p.name === 'Kids');
+                if (!kidsProf) {
+                    kidsProf = prebuilt[2];
+                    cleaned.push(kidsProf);
+                } else {
+                    kidsProf.id = 'prof_kids';
+                    kidsProf.name = 'Kids';
+                    kidsProf.isKid = true;
+                    kidsProf.isLocked = true;
+                }
+
+                if (cleaned[0]) {
+                    cleaned[0].isDefault = true;
+                }
+
+                localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(cleaned));
+                return cleaned;
             }
         }
     } catch (_e) {
         // fallback
     }
 
-    const defaultList = [createInitialProfile()];
     try {
-        localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(defaultList));
-        localStorage.setItem(STORAGE_ACTIVE_KEY, defaultList[0].id);
+        localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(prebuilt));
+        localStorage.setItem(STORAGE_ACTIVE_KEY, prebuilt[0].id);
     } catch (_e) {
-        // storage quota exceeded or unavailable
+        // quota exceeded
     }
-    return defaultList;
+    return prebuilt;
 }
 
 function getActiveProfile() {
@@ -139,7 +175,18 @@ function saveProfile(profile) {
         const list = getProfiles();
         const idx = list.findIndex((p) => p.id === profile.id);
         if (idx >= 0) {
-            list[idx] = { ...list[idx], ...profile, updatedAt: Date.now() };
+            // Respect locked names for Family and Kids
+            const current = list[idx];
+            const lockedName = current.isLocked ? current.name : profile.name;
+            const isKidVal = current.id === 'prof_kids' ? true : profile.isKid;
+
+            list[idx] = {
+                ...current,
+                ...profile,
+                name: lockedName,
+                isKid: isKidVal,
+                updatedAt: Date.now()
+            };
         } else {
             list.push({
                 ...profile,
@@ -157,8 +204,12 @@ function saveProfile(profile) {
 function deleteProfile(id) {
     if (typeof window === 'undefined') return;
     try {
+        // Cannot delete Family, Kids, or Default primary profile
+        if (id === 'prof_primary' || id === 'prof_family' || id === 'prof_kids') {
+            return;
+        }
         const list = getProfiles();
-        if (list.length <= 1) return; // Keep at least one profile
+        if (list.length <= 1) return;
         const filtered = list.filter((p) => p.id !== id);
         localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(filtered));
         const active = getActiveProfile();
@@ -223,6 +274,35 @@ function removeProfileWatchedId(profileId, itemId) {
     }
 }
 
+// ── Kids Safe Content Filter ────────────────────────────────
+const MATURE_KEYWORDS = [
+    'horror', 'erotic', 'porn', 'gore', '18+', 'mature',
+    'slasher', 'erotica', 'nsfw', 'r-rated', 'adult'
+];
+
+function isKidSafeItem(item) {
+    if (!item) return false;
+    const name = String(item.name || '').toLowerCase();
+    const genres = Array.isArray(item.genres) ? item.genres.map((g) => String(g).toLowerCase()) : [];
+
+    for (const kw of MATURE_KEYWORDS) {
+        if (name.includes(kw)) return false;
+        if (genres.some((g) => g.includes(kw))) return false;
+    }
+
+    // Must match kid/family categories or general animation/comedy
+    const isFriendly = genres.some((g) =>
+        g.includes('animation') ||
+        g.includes('family') ||
+        g.includes('children') ||
+        g.includes('comedy') ||
+        g.includes('adventure') ||
+        g.includes('fantasy')
+    );
+
+    return isFriendly || genres.length === 0;
+}
+
 function useMoxiProfile() {
     const [profiles, setProfiles] = React.useState(getProfiles);
     const [activeProfile, setActiveProfileState] = React.useState(getActiveProfile);
@@ -252,7 +332,7 @@ function useMoxiProfile() {
 
 module.exports = {
     PRESET_AVATARS,
-    createInitialProfile,
+    getPrebuiltProfiles,
     getProfiles,
     getActiveProfile,
     setActiveProfile,
@@ -262,5 +342,6 @@ module.exports = {
     getProfileWatchedIds,
     addProfileWatchedId,
     removeProfileWatchedId,
+    isKidSafeItem,
     useMoxiProfile
 };
