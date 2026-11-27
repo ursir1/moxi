@@ -1,11 +1,13 @@
 // Copyright (C) 2017-2026 Smart code 203358507
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCore } from 'stremio/core';
 import { Group, Row, RowButton } from '../components';
 import getAvatar from '../getAvatar';
 import styles from './Account.less';
+const { useMoxiProfile } = require('stremio/common/moxiProfiles');
+const MoxiProfileModal = require('stremio/components/MoxiProfileModal');
 
 type Props = {
     profile: Profile,
@@ -18,8 +20,11 @@ type Props = {
 const Account = ({ profile, dataExport }: Props) => {
     const { t } = useTranslation();
     const core = useCore();
+    const { activeProfile } = useMoxiProfile();
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<'switch' | 'avatar'>('switch');
 
-    const avatar = useMemo(() => getAvatar(profile.auth), [profile.auth]);
+    const avatar = useMemo(() => getAvatar(profile.auth), [profile.auth, activeProfile]);
 
     const onLogout = useCallback(() => {
         core.transport.dispatch({
@@ -34,9 +39,12 @@ const Account = ({ profile, dataExport }: Props) => {
         <React.Fragment>
             <Group>
                 <div className={styles['identity']}>
-                    <div className={styles['avatar']} style={{ backgroundImage: avatar }} />
+                    <div className={styles['avatar']} style={{ backgroundImage: avatar, cursor: 'pointer' }} onClick={() => { setModalMode('avatar'); setModalOpen(true); }} title="Change Avatar" />
                     <div className={styles['text']}>
-                        <div className={styles['name']} title={profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}>
+                        <div className={styles['name']} style={{ color: '#2FBF71', fontWeight: 700 }} title={activeProfile?.name || 'Primary Profile'}>
+                            {activeProfile?.name || 'Primary Profile'}
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>
                             {profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}
                         </div>
                         {
@@ -51,6 +59,14 @@ const Account = ({ profile, dataExport }: Props) => {
                             <RowButton variant={'primary'} label={`${t('LOG_IN')} / ${t('SIGN_UP')}`} href={'#/intro'} />
                     }
                 </div>
+            </Group>
+            <Group title="Moxi Profiles & Avatars">
+                <Row rowId={'moxi_profiles'} label="Multi-Profiles" description="Switch between different viewer profiles or create a new profile." stackOnPhone={true}>
+                    <RowButton label="Switch Profile" onClick={() => { setModalMode('switch'); setModalOpen(true); }} />
+                </Row>
+                <Row rowId={'moxi_avatar'} label="Custom Avatar" description="Choose from neon avatar presets or upload your own profile photo." stackOnPhone={true}>
+                    <RowButton label="Change Avatar" onClick={() => { setModalMode('avatar'); setModalOpen(true); }} />
+                </Row>
             </Group>
             {
                 profile?.auth?.user?.email &&
@@ -85,6 +101,11 @@ const Account = ({ profile, dataExport }: Props) => {
                         </Row>
                     </Group>
             }
+            <MoxiProfileModal
+                isOpen={modalOpen}
+                initialMode={modalMode}
+                onClose={() => setModalOpen(false)}
+            />
         </React.Fragment>
     );
 };

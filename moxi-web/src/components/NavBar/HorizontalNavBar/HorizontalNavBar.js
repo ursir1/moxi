@@ -9,6 +9,7 @@ const { Button, Image } = require('stremio/components');
 const { useFullscreen } = require('stremio/common/Fullscreen');
 const { useHorizontalNavGamepadNavigation } = require('stremio/services/GamepadNavigation');
 const useProfile = require('stremio/common/useProfile');
+const { useMoxiProfile, resolveAvatarUrl } = require('stremio/common/moxiProfiles');
 const SearchBar = require('./SearchBar');
 const NavMenu = require('./NavMenu');
 const styles = require('./styles');
@@ -16,16 +17,15 @@ const { t } = require('i18next');
 
 const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, originPath, onBackButtonClick, hdrInfo, ...props }) => {
     const profile = useProfile();
+    const { activeProfile } = useMoxiProfile();
     const goBack = useGoBack(originPath);
     const [fullscreen, requestFullscreen, exitFullscreen, , supported] = useFullscreen();
     const avatar = React.useMemo(() => {
-        if (!profile || !profile.auth) {
-            return null;
-        }
-        return profile.auth.user && profile.auth.user.avatar ?
+        const fallback = (profile && profile.auth && profile.auth.user && profile.auth.user.avatar) ?
             profile.auth.user.avatar :
             require('/assets/images/default_avatar.png');
-    }, [profile]);
+        return resolveAvatarUrl(activeProfile?.avatar, fallback);
+    }, [profile, activeProfile]);
     const renderNavMenuLabel = React.useCallback(({ ref, className, onClick, children, }) => (
         <Button
             ref={ref}

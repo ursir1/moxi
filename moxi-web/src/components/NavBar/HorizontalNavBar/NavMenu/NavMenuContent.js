@@ -10,6 +10,8 @@ const { useCore } = require('stremio/core');
 const { Button } = require('stremio/components');
 const { useFullscreen } = require('stremio/common/Fullscreen');
 const useProfile = require('stremio/common/useProfile');
+const { useMoxiProfile, resolveAvatarUrl } = require('stremio/common/moxiProfiles');
+const MoxiProfileModal = require('stremio/components/MoxiProfileModal');
 const usePWA = require('stremio/common/usePWA');
 const { default: useInstallPrompt } = require('stremio/common/useInstallPrompt');
 const { default: usePlayUrl } = require('stremio/common/usePlayUrl');
@@ -23,6 +25,9 @@ const NavMenuContent = ({ onClick }) => {
     const navigate = useNavigate();
     const core = useCore();
     const profile = useProfile();
+    const { activeProfile } = useMoxiProfile();
+    const [profileModalOpen, setProfileModalOpen] = React.useState(false);
+    const [profileModalMode, setProfileModalMode] = React.useState('switch');
     const streamingServer = useStreamingServer();
     const { handlePlayUrl } = usePlayUrl();
     const toast = useToast();
@@ -64,29 +69,72 @@ const NavMenuContent = ({ onClick }) => {
             : navigate('/intro');
     }, [profile.auth, logoutButtonOnClick, navigate]);
 
+    const activeAvatar = React.useMemo(() => {
+        const fallback = (profile && profile.auth && profile.auth.user && profile.auth.user.avatar) ?
+            profile.auth.user.avatar :
+            require('/assets/images/default_avatar.png');
+        return resolveAvatarUrl(activeProfile?.avatar, fallback);
+    }, [profile, activeProfile]);
+
     return (
         <div className={classnames(styles['nav-menu-container'], 'animation-fade-in', { [styles['with-warning']]: !streamingServerWarningDismissed } )} onClick={onClick}>
             <div className={styles['user-info-container']}>
                 <div
                     className={styles['avatar-container']}
                     style={{
-                        backgroundImage: profile.auth === null ?
-                            `url('${require('/assets/images/anonymous.png')}')`
-                            :
-                            profile.auth.user.avatar ?
-                                `url('${profile.auth.user.avatar}')`
-                                :
-                                `url('${require('/assets/images/default_avatar.png')}')`
+                        backgroundImage: `url('${activeAvatar}')`,
+                        cursor: 'pointer'
+                    }}
+                    title="Change Avatar"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setProfileModalMode('avatar');
+                        setProfileModalOpen(true);
                     }}
                 />
                 <div className={styles['user-info-details']}>
                     <div className={styles['email-container']}>
-                        <div className={styles['email-label']}>{profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}</div>
+                        <div className={styles['email-label']} style={{ fontWeight: 700, color: '#2FBF71' }}>
+                            {activeProfile?.name || 'Primary Profile'}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}
+                        </div>
                     </div>
                     <Button className={styles['logout-button-container']} title={profile.auth === null ? `${t('LOG_IN')} / ${t('SIGN_UP')}` : t('LOG_OUT')} onClick={handleAuth}>
                         <div className={styles['logout-label']}>{profile.auth === null ? `${t('LOG_IN')} / ${t('SIGN_UP')}` : t('LOG_OUT')}</div>
                     </Button>
                 </div>
+            </div>
+            <div className={styles['nav-menu-section']} style={{ borderBottom: '1px solid rgba(47, 191, 113, 0.2)' }}>
+                <Button
+                    className={styles['nav-menu-option-container']}
+                    title="Who is Watching? (Switch Profile)"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setProfileModalMode('switch');
+                        setProfileModalOpen(true);
+                    }}
+                >
+                    <Icon className={styles['icon']} name={'person-outline'} style={{ color: '#2FBF71' }} />
+                    <div className={styles['nav-menu-option-label']} style={{ color: '#2FBF71', fontWeight: 600 }}>
+                        Switch Profile
+                    </div>
+                </Button>
+                <Button
+                    className={styles['nav-menu-option-container']}
+                    title="Customize Profile Avatar"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setProfileModalMode('avatar');
+                        setProfileModalOpen(true);
+                    }}
+                >
+                    <Icon className={styles['icon']} name={'edit'} style={{ color: '#F2B51D' }} />
+                    <div className={styles['nav-menu-option-label']} style={{ color: '#F2B51D', fontWeight: 600 }}>
+                        Change Avatar
+                    </div>
+                </Button>
             </div>
             {
                 (supported && !isAndroidPWA) || install !== null ?
@@ -147,6 +195,11 @@ const NavMenuContent = ({ onClick }) => {
                         null
                 }
             </div>
+            <MoxiProfileModal
+                isOpen={profileModalOpen}
+                initialMode={profileModalMode}
+                onClose={() => setProfileModalOpen(false)}
+            />
         </div>
     );
 };
