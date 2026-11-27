@@ -12,6 +12,50 @@ const {
 } = require('stremio/common/moxiProfiles');
 const styles = require('./styles');
 
+// Verified high-res trending backdrops and logos from Cinemeta
+const INITIAL_FEATURED_CATALOG = [
+    {
+        id: 'tt2560140',
+        name: 'Attack on Titan',
+        background: 'https://images.metahub.space/background/medium/tt2560140/img',
+        logo: 'https://images.metahub.space/logo/medium/tt2560140/img',
+        releaseInfo: '2013–2023',
+        type: 'Animation'
+    },
+    {
+        id: 'tt15239678',
+        name: 'Dune: Part Two',
+        background: 'https://images.metahub.space/background/medium/tt15239678/img',
+        logo: 'https://images.metahub.space/logo/medium/tt15239678/img',
+        releaseInfo: '2024',
+        type: 'Movie'
+    },
+    {
+        id: 'tt7441658',
+        name: 'Black Clover',
+        background: 'https://images.metahub.space/background/medium/tt7441658/img',
+        logo: 'https://images.metahub.space/logo/medium/tt7441658/img',
+        releaseInfo: '2017–2026',
+        type: 'Animation'
+    },
+    {
+        id: 'tt11198330',
+        name: 'House of the Dragon',
+        background: 'https://images.metahub.space/background/medium/tt11198330/img',
+        logo: 'https://images.metahub.space/logo/medium/tt11198330/img',
+        releaseInfo: '2024',
+        type: 'Series'
+    },
+    {
+        id: 'tt33764258',
+        name: 'The Odyssey',
+        background: 'https://images.metahub.space/background/medium/tt33764258/img',
+        logo: 'https://images.metahub.space/logo/medium/tt33764258/img',
+        releaseInfo: '2026',
+        type: 'Movie'
+    }
+];
+
 const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
     const stremioProfile = useProfile();
     const [board] = useBoard();
@@ -66,28 +110,58 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
         return () => window.removeEventListener('moxi-open-profile-screen', onOpen);
     }, []);
 
-    // Dynamic featured items from installed Addons (Cinemeta, TMDB, AnimeStream)
+    const [catalogItems, setCatalogItems] = React.useState(INITIAL_FEATURED_CATALOG);
+
+    // Fetch trending Movies, Anime, and Series live from Cinemeta
+    React.useEffect(() => {
+        let isCancelled = false;
+        Promise.all([
+            fetch('https://v3-cinemeta.strem.io/catalog/movie/top.json').then((r) => r.json()).catch(() => ({ metas: [] })),
+            fetch('https://v3-cinemeta.strem.io/catalog/series/top/genre=Animation.json').then((r) => r.json()).catch(() => ({ metas: [] })),
+            fetch('https://v3-cinemeta.strem.io/catalog/series/top.json').then((r) => r.json()).catch(() => ({ metas: [] }))
+        ]).then(([movies, anime, series]) => {
+            if (isCancelled) return;
+            const pool = [];
+            const mList = (movies.metas || []).filter((m) => typeof m.background === 'string' && m.background.length > 0);
+            const aList = (anime.metas || []).filter((m) => typeof m.background === 'string' && m.background.length > 0);
+            const sList = (series.metas || []).filter((m) => typeof m.background === 'string' && m.background.length > 0);
+            const max = Math.max(mList.length, aList.length, sList.length, 5);
+            for (let i = 0; i < max && pool.length < 18; i++) {
+                if (mList[i]) pool.push({ ...mList[i], type: 'Movie' });
+                if (aList[i]) pool.push({ ...aList[i], type: 'Animation' });
+                if (sList[i]) pool.push({ ...sList[i], type: 'Series' });
+            }
+            if (pool.length > 0) {
+                setCatalogItems(pool);
+            }
+        }).catch((err) => {
+            console.warn('Profile screen catalog fetch:', err);
+        });
+        return () => { isCancelled = true; };
+    }, []);
+
+    // Combine with board spotlight if available
     const featuredItems = React.useMemo(() => {
         const spotlightContent = (board.spotlight?.type === 'Ready' && Array.isArray(board.spotlight.content)) ?
             board.spotlight.content :
             [];
-        if (spotlightContent.length > 0) {
-            const withBg = spotlightContent.filter((it) => typeof it.background === 'string' && it.background.length > 0);
-            if (withBg.length > 0) return withBg;
+        const withBg = spotlightContent.filter((it) => typeof it.background === 'string' && it.background.length > 0);
+        if (withBg.length > 0) {
+            return [...withBg, ...catalogItems];
         }
-        return [];
-    }, [board.spotlight]);
+        return catalogItems;
+    }, [board.spotlight, catalogItems]);
 
-    // Rotate backdrop every 8 seconds if multiple items exist
+    // Rotate backdrop every 7 seconds
     React.useEffect(() => {
         if (featuredItems.length <= 1) return undefined;
         const timer = setInterval(() => {
             setActiveBackdropIdx((prev) => (prev + 1) % featuredItems.length);
-        }, 8000);
+        }, 7000);
         return () => clearInterval(timer);
     }, [featuredItems.length]);
 
-    const currentFeatured = featuredItems[activeBackdropIdx] || null;
+    const currentFeatured = featuredItems[activeBackdropIdx] || featuredItems[0];
 
     React.useEffect(() => {
         setLogoFailed(false);
