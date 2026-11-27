@@ -14,7 +14,7 @@ const { default: useScrolledPast } = require('./Spotlight/useScrolledPast');
 const styles = require('./styles');
 const { default: StreamingServerWarning } = require('./StreamingServerWarning');
 const { default: RemoteNotification } = require('stremio/components/RemoteNotification');
-const { useMoxiProfile, getProfileWatchedIds, isKidSafeItem } = require('stremio/common/moxiProfiles');
+const { useMoxiProfile, getProfileWatchedIds, isKidSafeItem, isFamilySafeItem } = require('stremio/common/moxiProfiles');
 
 const THRESHOLD = 5;
 
@@ -51,14 +51,18 @@ const Board = () => {
         items: (Array.isArray(liveTvContinueWatching.items) ? liveTvContinueWatching.items : [])
             .map((item) => ({ ...item, posterShape: 'landscape' })),
     }), [liveTvContinueWatching.items]);
-    const isKid = !!activeProfile?.isKid;
+    const isKid = !!activeProfile?.isKid || activeProfile?.id === 'prof_kids';
+    const isFamily = activeProfile?.id === 'prof_family' || activeProfile?.name?.toLowerCase() === 'family';
     const spotlightItems = React.useMemo(() => {
         const raw = board.spotlight?.type === 'Ready' && Array.isArray(board.spotlight.content) ? board.spotlight.content : [];
         if (isKid) {
             return raw.filter(isKidSafeItem);
         }
+        if (isFamily) {
+            return raw.filter(isFamilySafeItem);
+        }
         return raw;
-    }, [board.spotlight, isKid]);
+    }, [board.spotlight, isKid, isFamily]);
     const spotlightVisible = spotlightItems.length > 0 || board.spotlight?.type === 'Loading';
     const boardCatalogsOffset =
         (spotlightVisible ? 1 : 0) +
@@ -70,22 +74,34 @@ const Board = () => {
             profile.settings.streamingServerWarningDismissed.getTime() < Date.now());
     }, [profile.settings, streamingServer.settings]);
     const filteredCatalogs = React.useMemo(() => {
-        if (!isKid || !Array.isArray(board.catalogs)) {
+        if (!Array.isArray(board.catalogs)) {
             return board.catalogs;
         }
-        return board.catalogs.map((catalog) => {
-            if (catalog.content?.type === 'Ready' && Array.isArray(catalog.content.items)) {
-                return {
-                    ...catalog,
-                    content: {
-                        ...catalog.content,
-                        items: catalog.content.items.filter(isKidSafeItem)
-                    }
-                };
-            }
-            return catalog;
-        });
-    }, [board.catalogs, isKid]);
+        if (!isKid && !isFamily) {
+            return board.catalogs;
+        }
+        const filterFn = isKid ? isKidSafeItem : isFamilySafeItem;
+        return board.catalogs
+            .map((catalog) => {
+                if (catalog.content?.type === 'Ready' && Array.isArray(catalog.content.content)) {
+                    const safeList = catalog.content.content.filter(filterFn);
+                    return {
+                        ...catalog,
+                        content: {
+                            ...catalog.content,
+                            content: safeList
+                        }
+                    };
+                }
+                return catalog;
+            })
+            .filter((catalog) => {
+                if (catalog.content?.type === 'Ready' && Array.isArray(catalog.content.content)) {
+                    return catalog.content.content.length > 0;
+                }
+                return true;
+            });
+    }, [board.catalogs, isKid, isFamily]);
     const { catalogRows, scrollContainerRef, onScroll } = useVisibleCatalogs({
         catalogs: filteredCatalogs,
         loadRange: loadBoardRows,

@@ -274,33 +274,46 @@ function removeProfileWatchedId(profileId, itemId) {
     }
 }
 
-// ── Kids Safe Content Filter ────────────────────────────────
-const MATURE_KEYWORDS = [
+// ── Content Safety Filters for Kids and Family ────────────────
+const KID_MATURE_KEYWORDS = [
     'horror', 'erotic', 'porn', 'gore', '18+', 'mature',
-    'slasher', 'erotica', 'nsfw', 'r-rated', 'adult'
+    'slasher', 'erotica', 'nsfw', 'r-rated', 'adult', 'sex',
+    'blood', 'demon', 'zombie', 'murder', 'crime', 'terror', 'violence'
+];
+
+const FAMILY_MATURE_KEYWORDS = [
+    'erotic', 'porn', 'xxx', 'gore', 'slasher', 'erotica',
+    'nudity', 'nsfw', 'hardcore', 'sadistic', 'graphic violence'
 ];
 
 function isKidSafeItem(item) {
     if (!item) return false;
-    const name = String(item.name || '').toLowerCase();
-    const genres = Array.isArray(item.genres) ? item.genres.map((g) => String(g).toLowerCase()) : [];
+    const text = (
+        (item.name || '') + ' ' +
+        (Array.isArray(item.genres) ? item.genres.join(' ') : '') + ' ' +
+        (item.description || '')
+    ).toLowerCase();
 
-    for (const kw of MATURE_KEYWORDS) {
-        if (name.includes(kw)) return false;
-        if (genres.some((g) => g.includes(kw))) return false;
+    for (const kw of KID_MATURE_KEYWORDS) {
+        if (text.includes(kw)) return false;
     }
 
-    // Must match kid/family categories or general animation/comedy
-    const isFriendly = genres.some((g) =>
-        g.includes('animation') ||
-        g.includes('family') ||
-        g.includes('children') ||
-        g.includes('comedy') ||
-        g.includes('adventure') ||
-        g.includes('fantasy')
-    );
+    const friendly = ['animation', 'family', 'children', 'adventure', 'comedy', 'fantasy', 'disney', 'anime', 'pixar', 'cartoon'];
+    return friendly.some((f) => text.includes(f));
+}
 
-    return isFriendly || genres.length === 0;
+function isFamilySafeItem(item) {
+    if (!item) return false;
+    const text = (
+        (item.name || '') + ' ' +
+        (Array.isArray(item.genres) ? item.genres.join(' ') : '') + ' ' +
+        (item.description || '')
+    ).toLowerCase();
+
+    for (const kw of FAMILY_MATURE_KEYWORDS) {
+        if (text.includes(kw)) return false;
+    }
+    return true;
 }
 
 function useMoxiProfile() {
@@ -343,5 +356,6 @@ module.exports = {
     addProfileWatchedId,
     removeProfileWatchedId,
     isKidSafeItem,
+    isFamilySafeItem,
     useMoxiProfile
 };
