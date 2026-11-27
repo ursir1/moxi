@@ -58,9 +58,9 @@ const STORAGE_ACTIVE_KEY = 'moxi_active_profile_id';
 const EVENT_NAME = 'moxi-profile-changed';
 
 const INITIAL_DEFAULT_PROFILES = [
-    { id: 'prof_khadar', name: 'Khadar', avatar: 'pirate_straw', isKid: false, isDefault: true },
-    { id: 'prof_malik', name: 'Malik Oskar', avatar: 'shadow_red', isKid: false, isDefault: false },
-    { id: 'prof_faiza', name: 'Faiza', avatar: 'cat_orange', isKid: false, isDefault: false },
+    { id: 'prof_main', name: 'Main', avatar: 'pirate_straw', isKid: false, isDefault: true },
+    { id: 'prof_family', name: 'Family', avatar: 'shadow_red', isKid: false, isDefault: false },
+    { id: 'prof_guest', name: 'Guest', avatar: 'cat_orange', isKid: false, isDefault: false },
     { id: 'prof_kids', name: 'Kids', avatar: 'kids_purple', isKid: true, isDefault: false }
 ];
 
@@ -70,7 +70,14 @@ function getProfiles() {
         const raw = localStorage.getItem(STORAGE_PROFILES_KEY);
         if (raw) {
             const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                const hasDemoNames = parsed.some((p) => p.name === 'Khadar' || p.name === 'Malik Oskar');
+                if (hasDemoNames) {
+                    localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(INITIAL_DEFAULT_PROFILES));
+                    return INITIAL_DEFAULT_PROFILES;
+                }
+                return parsed;
+            }
         }
     } catch (_e) {
         // use default profile
