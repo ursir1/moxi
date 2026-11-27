@@ -14,6 +14,7 @@ const { default: useScrolledPast } = require('./Spotlight/useScrolledPast');
 const styles = require('./styles');
 const { default: StreamingServerWarning } = require('./StreamingServerWarning');
 const { default: RemoteNotification } = require('stremio/components/RemoteNotification');
+const { useMoxiProfile, getProfileWatchedIds } = require('stremio/common/moxiProfiles');
 
 const THRESHOLD = 5;
 
@@ -25,6 +26,27 @@ const Board = () => {
     const [board, loadBoardRows] = useBoard();
     const notifications = useNotifications();
     const profile = useProfile();
+    const { activeProfile } = useMoxiProfile();
+    const profileContinueWatching = React.useMemo(() => {
+        if (!continueWatchingPreview || !Array.isArray(continueWatchingPreview.items)) {
+            return continueWatchingPreview;
+        }
+        const watchedSet = getProfileWatchedIds(activeProfile?.id);
+        if (watchedSet.size > 0) {
+            return {
+                ...continueWatchingPreview,
+                items: continueWatchingPreview.items.filter((item) => watchedSet.has(String(item._id || item.id)))
+            };
+        }
+        if (activeProfile && !activeProfile.isDefault) {
+            return {
+                ...continueWatchingPreview,
+                items: []
+            };
+        }
+        return continueWatchingPreview;
+    }, [continueWatchingPreview, activeProfile]);
+
     const liveTvCatalog = React.useMemo(() => ({
         items: (Array.isArray(liveTvContinueWatching.items) ? liveTvContinueWatching.items : [])
             .map((item) => ({ ...item, posterShape: 'landscape' })),
@@ -33,7 +55,7 @@ const Board = () => {
     const spotlightVisible = spotlightItems.length > 0 || board.spotlight?.type === 'Loading';
     const boardCatalogsOffset =
         (spotlightVisible ? 1 : 0) +
-        (continueWatchingPreview.items.length > 0 ? 1 : 0) +
+        (profileContinueWatching.items.length > 0 ? 1 : 0) +
         (liveTvCatalog.items.length > 0 ? 1 : 0);
     const showStreamingServerWarning = React.useMemo(() => {
         return streamingServer.settings !== null && streamingServer.settings.type === 'Err' && (
@@ -51,7 +73,7 @@ const Board = () => {
     return (
         <div className={styles['board-container']}>
             <EventModal />
-            <RemoteNotification catalogs={board.catalogs} watching={continueWatchingPreview.items} />
+            <RemoteNotification catalogs={board.catalogs} watching={profileContinueWatching.items} />
             <MainNavBars className={classnames(styles['board-content-container'], { [styles['with-spotlight']]: spotlightVisible, [styles['scrolled']]: scrolledPastSpotlight })} route={'board'}>
                 <div ref={scrollContainerRef} className={styles['board-content']} onScroll={onScroll}>
                     {
@@ -69,11 +91,11 @@ const Board = () => {
                                 null
                     }
                     {
-                        continueWatchingPreview.items.length > 0 ?
+                        profileContinueWatching.items.length > 0 ?
                             <MetaRow
                                 className={classnames(styles['board-row'], styles['continue-watching-row'], 'animation-fade-in')}
                                 title={t.string('BOARD_CONTINUE_WATCHING')}
-                                catalog={continueWatchingPreview}
+                                catalog={profileContinueWatching}
                                 itemComponent={ContinueWatchingItem}
                                 notifications={notifications}
                             />

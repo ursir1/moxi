@@ -3,6 +3,7 @@
 const React = require('react');
 const { useCore } = require('stremio/core');
 const { useModelState, useCoreSuspender } = require('stremio/common');
+const { getActiveProfile, addProfileWatchedId } = require('stremio/common/moxiProfiles');
 
 const map = (player) => ({
     ...player,
@@ -102,6 +103,11 @@ const usePlayer = (urlParams) => {
         // live streams have no duration - report 0 instead of skipping the
         // action, otherwise the library item is never updated while watching
         if (typeof time === 'number' && typeof device === 'string') {
+            const activeProf = getActiveProfile();
+            const itemId = player?.metaItem?.content?.id || player?.metaItem?.id;
+            if (activeProf && itemId && time > 5) {
+                addProfileWatchedId(activeProf.id, itemId);
+            }
             core.transport.dispatch({
                 action: 'Player',
                 args: {

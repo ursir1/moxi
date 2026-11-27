@@ -3,6 +3,8 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const Icon = require('@stremio/stremio-icons/react').default;
+const { useProfile } = require('stremio/common');
+const useBoard = require('stremio/routes/Board/useBoard');
 const {
     PRESET_AVATARS,
     useMoxiProfile,
@@ -10,23 +12,9 @@ const {
 } = require('stremio/common/moxiProfiles');
 const styles = require('./styles');
 
-// High-res cinematic backdrops matching the reference images
-const HERO_BACKDROPS = [
-    {
-        bg: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop',
-        logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Marvel_Cinematic_Universe_logo.svg/440px-Marvel_Cinematic_Universe_logo.svg.png',
-        tagline: 'Brand New Day',
-        subtitle: 'Coming Tuesday'
-    },
-    {
-        bg: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1600&auto=format&fit=crop',
-        logo: '',
-        tagline: 'Moxi Stellar Universe',
-        subtitle: 'Featured Collection'
-    }
-];
-
 const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
+    const stremioProfile = useProfile();
+    const [board] = useBoard();
     const {
         profiles,
         activeProfile: _activeProfile,
@@ -38,9 +26,23 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
     const [visible, setVisible] = React.useState(forceVisible);
     const [isEditMode, setIsEditMode] = React.useState(false);
     const [editingProfile, setEditingProfile] = React.useState(null);
+    const [isCreatingNew, setIsCreatingNew] = React.useState(false);
     const [transitioningProfile, setTransitioningProfile] = React.useState(null);
-    const [backdropIndex, _setBackdropIndex] = React.useState(0);
+    const [activeBackdropIdx, setActiveBackdropIdx] = React.useState(0);
+    const [logoFailed, setLogoFailed] = React.useState(false);
     const fileInputRef = React.useRef(null);
+
+    // Auto-adopt user's account username for the primary profile
+    React.useEffect(() => {
+        const userEmail = stremioProfile?.auth?.user?.email;
+        if (typeof userEmail === 'string' && userEmail.includes('@')) {
+            const username = userEmail.split('@')[0];
+            const primary = profiles.find((p) => p.id === 'prof_primary');
+            if (primary && (primary.name === 'My Profile' || primary.name === 'Main')) {
+                saveProfile({ ...primary, name: username });
+            }
+        }
+    }, [stremioProfile?.auth?.user?.email, profiles, saveProfile]);
 
     // Show on first load of session if not yet selected
     React.useEffect(() => {
@@ -57,21 +59,50 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
         const onOpen = () => {
             setVisible(true);
             setIsEditMode(false);
+            setIsCreatingNew(false);
             setTransitioningProfile(null);
         };
         window.addEventListener('moxi-open-profile-screen', onOpen);
         return () => window.removeEventListener('moxi-open-profile-screen', onOpen);
     }, []);
 
+    // Dynamic featured items from installed Addons (Cinemeta, TMDB, AnimeStream)
+    const featuredItems = React.useMemo(() => {
+        const spotlightContent = (board.spotlight?.type === 'Ready' && Array.isArray(board.spotlight.content)) ?
+            board.spotlight.content :
+            [];
+        if (spotlightContent.length > 0) {
+            const withBg = spotlightContent.filter((it) => typeof it.background === 'string' && it.background.length > 0);
+            if (withBg.length > 0) return withBg;
+        }
+        return [];
+    }, [board.spotlight]);
+
+    // Rotate backdrop every 8 seconds if multiple items exist
+    React.useEffect(() => {
+        if (featuredItems.length <= 1) return undefined;
+        const timer = setInterval(() => {
+            setActiveBackdropIdx((prev) => (prev + 1) % featuredItems.length);
+        }, 8000);
+        return () => clearInterval(timer);
+    }, [featuredItems.length]);
+
+    const currentFeatured = featuredItems[activeBackdropIdx] || null;
+
+    React.useEffect(() => {
+        setLogoFailed(false);
+    }, [activeBackdropIdx, currentFeatured?.id]);
+
     if (!visible && !forceVisible) return null;
 
     const handleProfileClick = (profile) => {
         if (isEditMode) {
+            setIsCreatingNew(false);
             setEditingProfile({ ...profile });
             return;
         }
 
-        // Trigger transition screen (Image 4 from reference)
+        // Trigger black transition screen with rotating spinner
         setTransitioningProfile(profile);
         setActiveProfile(profile.id);
 
@@ -85,22 +116,23 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
         }, 750);
     };
 
-    const handleSaveEditingProfile = () => {
-        if (editingProfile) {
-            saveProfile(editingProfile);
-            setEditingProfile(null);
-        }
+    const handleOpenCreateModal = () => {
+        setIsCreatingNew(true);
+        const nextNum = profiles.length + 1;
+        setEditingProfile({
+            id: 'profile_' + Date.now(),
+            name: `Profile ${nextNum}`,
+            avatar: PRESET_AVATARS[(nextNum - 1) % PRESET_AVATARS.length].id,
+            isKid: false
+        });
     };
 
-    const handleAddNewProfile = () => {
-        const newProf = {
-            id: 'profile_' + Date.now(),
-            name: `User ${profiles.length + 1}`,
-            avatar: PRESET_AVATARS[profiles.length % PRESET_AVATARS.length].id,
-            isKid: false
-        };
-        saveProfile(newProf);
-        setEditingProfile(newProf);
+    const handleSaveEditingProfile = () => {
+        if (editingProfile && editingProfile.name.trim().length > 0) {
+            saveProfile(editingProfile);
+            setEditingProfile(null);
+            setIsCreatingNew(false);
+        }
     };
 
     const handleFileUpload = (e) => {
@@ -130,27 +162,37 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
         );
     }
 
-    const currentHero = HERO_BACKDROPS[backdropIndex] || HERO_BACKDROPS[0];
+    const heroBgStyle = currentFeatured?.background ?
+        { backgroundImage: `url('${currentFeatured.background}')` } :
+        { background: 'radial-gradient(ellipse at 50% 25%, #152e1f 0%, #080d0a 75%)' };
 
     return (
         <div className={styles['profile-screen']}>
-            {/* Cinematic Hero Backdrop */}
-            <div
-                className={styles['backdrop']}
-                style={{ backgroundImage: `url('${currentHero.bg}')` }}
-            >
+            {/* Cinematic Hero Backdrop from Addons */}
+            <div className={styles['backdrop']} style={heroBgStyle}>
                 <div className={styles['backdrop-gradient']} />
             </div>
 
             <div className={styles['content-container']}>
                 {/* Hero Logo / Title Area */}
                 <div className={styles['hero-branding']}>
-                    {currentHero.logo ? (
-                        <img className={styles['hero-logo']} src={currentHero.logo} alt="Featured" />
+                    {currentFeatured?.logo && !logoFailed ? (
+                        <img
+                            className={styles['hero-logo']}
+                            src={currentFeatured.logo}
+                            alt={currentFeatured.name || 'Featured'}
+                            onError={() => setLogoFailed(true)}
+                        />
                     ) : (
-                        <div className={styles['hero-title']}>{currentHero.tagline}</div>
+                        <div className={styles['hero-title']}>
+                            {currentFeatured?.name || 'Moxi Cinema'}
+                        </div>
                     )}
-                    <div className={styles['hero-subtitle']}>{currentHero.subtitle}</div>
+                    <div className={styles['hero-subtitle']}>
+                        {currentFeatured?.releaseInfo ?
+                            `${currentFeatured.releaseInfo} • ${currentFeatured.type ? currentFeatured.type.toUpperCase() : 'FEATURED'}` :
+                            'Movies, Series & Animation'}
+                    </div>
                 </div>
 
                 {/* Section Header */}
@@ -158,7 +200,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                     {isEditMode ? 'Edit Profiles' : 'Choose Your Profile'}
                 </div>
 
-                {/* Squircle Profiles Grid (Image 1 & 2) */}
+                {/* Squircle Profiles Grid */}
                 <div className={styles['profiles-grid']}>
                     {profiles.map((p) => {
                         const avatarUrl = resolveAvatarUrl(p.avatar);
@@ -174,7 +216,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                                     className={styles['squircle-avatar']}
                                     style={{ backgroundImage: `url('${avatarUrl}')` }}
                                 >
-                                    {/* Edit Pencil Overlay (Image 3) */}
+                                    {/* Edit Pencil Overlay */}
                                     {isEditMode && (
                                         <div className={styles['edit-overlay']}>
                                             <Icon className={styles['overlay-pencil']} name="edit" />
@@ -191,6 +233,19 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                         );
                     })}
 
+                    {/* Always-visible Add Profile Squircle Card */}
+                    {!isEditMode && (
+                        <div
+                            className={styles['profile-item']}
+                            onClick={handleOpenCreateModal}
+                        >
+                            <div className={classnames(styles['squircle-avatar'], styles['action-squircle'], styles['add-squircle'])}>
+                                <Icon className={styles['action-icon']} name="plus" />
+                            </div>
+                            <div className={styles['profile-name']}>Add Profile</div>
+                        </div>
+                    )}
+
                     {/* Edit / Done Action Card */}
                     <div
                         className={styles['profile-item']}
@@ -206,31 +261,23 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                             {isEditMode ? 'Done' : 'Edit'}
                         </div>
                     </div>
-
-                    {/* Add Profile Card (when in Edit Mode) */}
-                    {isEditMode && (
-                        <div
-                            className={styles['profile-item']}
-                            onClick={handleAddNewProfile}
-                        >
-                            <div className={classnames(styles['squircle-avatar'], styles['action-squircle'], styles['add-squircle'])}>
-                                <Icon className={styles['action-icon']} name="plus" />
-                            </div>
-                            <div className={styles['profile-name']}>Add Profile</div>
-                        </div>
-                    )}
                 </div>
             </div>
 
-            {/* Profile Editor Modal (When tapping a profile in Edit mode) */}
+            {/* Profile Editor / Creator Modal */}
             {editingProfile && (
                 <div className={styles['editor-backdrop']}>
                     <div className={styles['editor-card']}>
                         <div className={styles['editor-header']}>
-                            <div className={styles['editor-title']}>Edit Profile</div>
+                            <div className={styles['editor-title']}>
+                                {isCreatingNew ? 'Create New Profile' : 'Edit Profile'}
+                            </div>
                             <button
                                 className={styles['editor-close']}
-                                onClick={() => setEditingProfile(null)}
+                                onClick={() => {
+                                    setEditingProfile(null);
+                                    setIsCreatingNew(false);
+                                }}
                             >
                                 ×
                             </button>
@@ -243,12 +290,14 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                             />
 
                             <div className={styles['input-group']}>
-                                <label className={styles['label']}>Name</label>
+                                <label className={styles['label']}>Profile Name</label>
                                 <input
                                     className={styles['text-field']}
                                     type="text"
+                                    placeholder="Enter profile name..."
                                     value={editingProfile.name}
                                     onChange={(e) => setEditingProfile({ ...editingProfile, name: e.target.value })}
+                                    autoFocus
                                 />
                             </div>
 
@@ -259,7 +308,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                                         checked={!!editingProfile.isKid}
                                         onChange={(e) => setEditingProfile({ ...editingProfile, isKid: e.target.checked })}
                                     />
-                                    <span>Kids Profile (Friendly badge)</span>
+                                    <span>Kids Profile (Kids badge & family safe)</span>
                                 </label>
                             </div>
 
@@ -293,7 +342,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                         </div>
 
                         <div className={styles['editor-footer']}>
-                            {profiles.length > 1 && (
+                            {!isCreatingNew && profiles.length > 1 && (
                                 <button
                                     className={styles['delete-btn']}
                                     onClick={() => {
@@ -308,7 +357,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                                 className={styles['save-btn']}
                                 onClick={handleSaveEditingProfile}
                             >
-                                Save Changes
+                                {isCreatingNew ? 'Create Profile' : 'Save Changes'}
                             </button>
                         </div>
                     </div>

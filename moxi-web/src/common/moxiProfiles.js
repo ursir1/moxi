@@ -3,16 +3,16 @@ const React = require('react');
 
 const PRESET_AVATARS = [
     {
-        id: 'shadow_red',
-        name: 'Shadow Dark',
-        accent: '#EF4444',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_sh" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#7f1d1d"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_sh)"/><path d="M22,25 C26,15 40,32 50,42 C60,32 74,15 78,25 C82,38 72,55 70,68 C68,78 62,88 50,88 C38,88 32,78 30,68 C28,55 18,38 22,25 Z" fill="#18181b"/><polygon points="35,28 50,45 65,28" fill="#dc2626"/><circle cx="42" cy="52" r="5" fill="#facc15"/><circle cx="58" cy="52" r="5" fill="#facc15"/><circle cx="42" cy="52" r="2.5" fill="#dc2626"/><circle cx="58" cy="52" r="2.5" fill="#dc2626"/><ellipse cx="50" cy="62" rx="12" ry="7" fill="#f4f4f5"/></svg>'
-    },
-    {
         id: 'pirate_straw',
         name: 'Straw Pirate',
         accent: '#F59E0B',
         svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_pir" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_pir)"/><ellipse cx="50" cy="42" rx="40" ry="14" fill="#d97706"/><ellipse cx="50" cy="38" rx="22" ry="16" fill="#f59e0b"/><rect x="28" y="36" width="44" height="6" fill="#dc2626"/><ellipse cx="50" cy="60" rx="20" ry="18" fill="#fef3c7"/><circle cx="42" cy="58" r="5" fill="#18181b"/><circle cx="58" cy="58" r="5" fill="#18181b"/><polygon points="50,64 47,68 53,68" fill="#18181b"/><rect x="42" y="72" width="16" height="4" rx="2" fill="#18181b"/></svg>'
+    },
+    {
+        id: 'shadow_red',
+        name: 'Shadow Dark',
+        accent: '#EF4444',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_sh" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#7f1d1d"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_sh)"/><path d="M22,25 C26,15 40,32 50,42 C60,32 74,15 78,25 C82,38 72,55 70,68 C68,78 62,88 50,88 C38,88 32,78 30,68 C28,55 18,38 22,25 Z" fill="#18181b"/><polygon points="35,28 50,45 65,28" fill="#dc2626"/><circle cx="42" cy="52" r="5" fill="#facc15"/><circle cx="58" cy="52" r="5" fill="#facc15"/><circle cx="42" cy="52" r="2.5" fill="#dc2626"/><circle cx="58" cy="52" r="2.5" fill="#dc2626"/><ellipse cx="50" cy="62" rx="12" ry="7" fill="#f4f4f5"/></svg>'
     },
     {
         id: 'cat_orange',
@@ -55,41 +55,59 @@ PRESET_AVATARS.forEach((p) => {
 
 const STORAGE_PROFILES_KEY = 'moxi_profiles';
 const STORAGE_ACTIVE_KEY = 'moxi_active_profile_id';
+const STORAGE_WATCHED_PREFIX = 'moxi_profile_watched_';
 const EVENT_NAME = 'moxi-profile-changed';
+const WATCHED_EVENT_NAME = 'moxi-profile-watched-changed';
 
-const INITIAL_DEFAULT_PROFILES = [
-    { id: 'prof_main', name: 'Main', avatar: 'pirate_straw', isKid: false, isDefault: true },
-    { id: 'prof_family', name: 'Family', avatar: 'shadow_red', isKid: false, isDefault: false },
-    { id: 'prof_guest', name: 'Guest', avatar: 'cat_orange', isKid: false, isDefault: false },
-    { id: 'prof_kids', name: 'Kids', avatar: 'kids_purple', isKid: true, isDefault: false }
-];
+const DEMO_IDS = new Set([
+    'prof_khadar',
+    'prof_malik',
+    'prof_faiza',
+    'prof_kids',
+    'prof_main',
+    'prof_family',
+    'prof_guest'
+]);
+
+function createInitialProfile(accountName) {
+    const name = (typeof accountName === 'string' && accountName.trim().length > 0) ?
+        accountName.trim() :
+        'My Profile';
+    return {
+        id: 'prof_primary',
+        name: name,
+        avatar: 'pirate_straw',
+        isKid: false,
+        isDefault: true
+    };
+}
 
 function getProfiles() {
-    if (typeof window === 'undefined') return INITIAL_DEFAULT_PROFILES;
+    if (typeof window === 'undefined') return [createInitialProfile()];
     try {
         const raw = localStorage.getItem(STORAGE_PROFILES_KEY);
         if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed) && parsed.length > 0) {
-                const hasDemoNames = parsed.some((p) => p.name === 'Khadar' || p.name === 'Malik Oskar');
-                if (hasDemoNames) {
-                    localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(INITIAL_DEFAULT_PROFILES));
-                    return INITIAL_DEFAULT_PROFILES;
+                // Filter out any old hardcoded demo dummy profiles
+                const filtered = parsed.filter((p) => !DEMO_IDS.has(p.id) && p.name !== 'Khadar' && p.name !== 'Malik Oskar');
+                if (filtered.length > 0) {
+                    return filtered;
                 }
-                return parsed;
             }
         }
     } catch (_e) {
-        // use default profile
+        // fallback
     }
 
+    const defaultList = [createInitialProfile()];
     try {
-        localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(INITIAL_DEFAULT_PROFILES));
-        localStorage.setItem(STORAGE_ACTIVE_KEY, INITIAL_DEFAULT_PROFILES[0].id);
+        localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(defaultList));
+        localStorage.setItem(STORAGE_ACTIVE_KEY, defaultList[0].id);
     } catch (_e) {
         // storage quota exceeded or unavailable
     }
-    return INITIAL_DEFAULT_PROFILES;
+    return defaultList;
 }
 
 function getActiveProfile() {
@@ -163,6 +181,48 @@ function resolveAvatarUrl(avatarValue, fallbackUrl) {
     return fallbackUrl || PRESET_AVATARS[0].dataUrl;
 }
 
+// ── Per-Profile Watch History Isolation ──────────────────────
+function getProfileWatchedIds(profileId) {
+    if (typeof window === 'undefined') return new Set();
+    try {
+        const id = profileId || getActiveProfile()?.id || 'prof_primary';
+        const raw = localStorage.getItem(STORAGE_WATCHED_PREFIX + id);
+        if (raw) {
+            const arr = JSON.parse(raw);
+            if (Array.isArray(arr)) return new Set(arr);
+        }
+    } catch (_e) {
+        // fallback
+    }
+    return new Set();
+}
+
+function addProfileWatchedId(profileId, itemId) {
+    if (typeof window === 'undefined' || !itemId) return;
+    try {
+        const id = profileId || getActiveProfile()?.id || 'prof_primary';
+        const set = getProfileWatchedIds(id);
+        set.add(String(itemId));
+        localStorage.setItem(STORAGE_WATCHED_PREFIX + id, JSON.stringify(Array.from(set)));
+        window.dispatchEvent(new CustomEvent(WATCHED_EVENT_NAME, { detail: { profileId: id, itemId } }));
+    } catch (_e) {
+        // storage quota exceeded
+    }
+}
+
+function removeProfileWatchedId(profileId, itemId) {
+    if (typeof window === 'undefined' || !itemId) return;
+    try {
+        const id = profileId || getActiveProfile()?.id || 'prof_primary';
+        const set = getProfileWatchedIds(id);
+        set.delete(String(itemId));
+        localStorage.setItem(STORAGE_WATCHED_PREFIX + id, JSON.stringify(Array.from(set)));
+        window.dispatchEvent(new CustomEvent(WATCHED_EVENT_NAME, { detail: { profileId: id, itemId } }));
+    } catch (_e) {
+        // ignore
+    }
+}
+
 function useMoxiProfile() {
     const [profiles, setProfiles] = React.useState(getProfiles);
     const [activeProfile, setActiveProfileState] = React.useState(getActiveProfile);
@@ -192,11 +252,15 @@ function useMoxiProfile() {
 
 module.exports = {
     PRESET_AVATARS,
+    createInitialProfile,
     getProfiles,
     getActiveProfile,
     setActiveProfile,
     saveProfile,
     deleteProfile,
     resolveAvatarUrl,
+    getProfileWatchedIds,
+    addProfileWatchedId,
+    removeProfileWatchedId,
     useMoxiProfile
 };
