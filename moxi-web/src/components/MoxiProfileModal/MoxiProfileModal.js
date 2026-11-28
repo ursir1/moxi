@@ -15,12 +15,12 @@ const MoxiProfileModal = ({ isOpen, onClose }) => {
         saveProfile
     } = useMoxiProfile();
 
-    const [selectedAvatar, setSelectedAvatar] = React.useState(activeProfile?.avatar || 'pirate_straw');
+    const [selectedAvatar, setSelectedAvatar] = React.useState(activeProfile?.avatar || 'luffy');
     const fileInputRef = React.useRef(null);
 
     React.useEffect(() => {
         if (isOpen) {
-            setSelectedAvatar(activeProfile?.avatar || 'pirate_straw');
+            setSelectedAvatar(activeProfile?.avatar || 'luffy');
         }
     }, [isOpen, activeProfile]);
 
@@ -83,7 +83,7 @@ const MoxiProfileModal = ({ isOpen, onClose }) => {
                                     >
                                         <div
                                             className={styles['preset-thumb']}
-                                            style={{ backgroundImage: `url('${preset.dataUrl}')` }}
+                                            style={{ backgroundImage: `url('${resolveAvatarUrl(preset.id)}')` }}
                                         />
                                         <div className={styles['preset-name']}>{preset.name}</div>
                                     </div>

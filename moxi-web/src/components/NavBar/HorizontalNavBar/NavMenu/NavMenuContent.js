@@ -83,7 +83,8 @@ const NavMenuContent = ({ onClick }) => {
                         cursor: 'pointer'
                     }}
                     title="Change Avatar"
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         window.dispatchEvent(new CustomEvent('moxi-open-avatar-modal'));
                     }}
                 />
@@ -118,7 +119,8 @@ const NavMenuContent = ({ onClick }) => {
                 <Button
                     className={styles['nav-menu-option-container']}
                     title="Customize Profile Avatar"
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         window.dispatchEvent(new CustomEvent('moxi-open-avatar-modal'));
                     }}
                 >

@@ -98,7 +98,9 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
         }
     }, []);
 
-    // Listen for manual trigger to switch profile
+    React.useEffect(() => {
+        setLogoFailed(false);
+    }, [activeBackdropIdx]);
     React.useEffect(() => {
         const onOpen = () => {
             setVisible(true);
@@ -271,7 +273,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
 
                 {/* Section Header */}
                 <div className={styles['prompt-title']}>
-                    {isEditMode ? 'Edit Profiles' : 'Choose Your Profile'}
+                    {isEditMode ? 'Manage Profiles' : 'Choose Your Profile'}
                 </div>
 
                 {/* Squircle Profiles Grid */}
@@ -307,34 +309,30 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                         );
                     })}
 
-                    {/* Always-visible Add Profile Squircle Card */}
-                    {!isEditMode && (
-                        <div
-                            className={styles['profile-item']}
-                            onClick={handleOpenCreateModal}
-                        >
-                            <div className={classnames(styles['squircle-avatar'], styles['action-squircle'], styles['add-squircle'])}>
-                                <Icon className={styles['action-icon']} name="plus" />
-                            </div>
-                            <div className={styles['profile-name']}>Add Profile</div>
-                        </div>
-                    )}
-
-                    {/* Edit / Done Action Card */}
+                    {/* Add Profile Squircle Card */}
                     <div
                         className={styles['profile-item']}
+                        onClick={handleOpenCreateModal}
+                    >
+                        <div className={classnames(styles['squircle-avatar'], styles['action-squircle'], styles['add-squircle'])}>
+                            <Icon className={styles['action-icon']} name="plus" />
+                        </div>
+                        <div className={styles['profile-name']}>Add Profile</div>
+                    </div>
+                </div>
+
+                {/* Manage Profiles / Done Pill Button */}
+                <div className={styles['manage-container']}>
+                    <button
+                        className={classnames(styles['manage-btn'], { [styles['active']]: isEditMode })}
                         onClick={() => setIsEditMode(!isEditMode)}
                     >
-                        <div className={classnames(styles['squircle-avatar'], styles['action-squircle'])}>
-                            <Icon
-                                className={styles['action-icon']}
-                                name={isEditMode ? 'close' : 'edit'}
-                            />
-                        </div>
-                        <div className={styles['profile-name']}>
-                            {isEditMode ? 'Done' : 'Edit'}
-                        </div>
-                    </div>
+                        <Icon
+                            className={styles['manage-icon']}
+                            name={isEditMode ? 'close' : 'edit'}
+                        />
+                        <span>{isEditMode ? 'Done' : 'Manage Profiles'}</span>
+                    </button>
                 </div>
             </div>
 
@@ -404,10 +402,11 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
                                 {PRESET_AVATARS.map((preset) => (
                                     <div
                                         key={preset.id}
+                                        title={preset.name}
                                         className={classnames(styles['choice-thumb'], {
                                             [styles['chosen']]: editingProfile.avatar === preset.id
                                         })}
-                                        style={{ backgroundImage: `url('${preset.dataUrl}')` }}
+                                        style={{ backgroundImage: `url('${resolveAvatarUrl(preset.id)}')` }}
                                         onClick={() => setEditingProfile({ ...editingProfile, avatar: preset.id })}
                                     />
                                 ))}

@@ -3,55 +3,132 @@ const React = require('react');
 
 const PRESET_AVATARS = [
     {
-        id: 'pirate_straw',
-        name: 'Straw Pirate',
-        accent: '#F59E0B',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_pir" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_pir)"/><ellipse cx="50" cy="42" rx="40" ry="14" fill="#d97706"/><ellipse cx="50" cy="38" rx="22" ry="16" fill="#f59e0b"/><rect x="28" y="36" width="44" height="6" fill="#dc2626"/><ellipse cx="50" cy="60" rx="20" ry="18" fill="#fef3c7"/><circle cx="42" cy="58" r="5" fill="#18181b"/><circle cx="58" cy="58" r="5" fill="#18181b"/><polygon points="50,64 47,68 53,68" fill="#18181b"/><rect x="42" y="72" width="16" height="4" rx="2" fill="#18181b"/></svg>'
-    },
-    {
-        id: 'gold_crown',
-        name: 'Family Crown',
-        accent: '#F2B51D',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#36290e"/><stop offset="100%" stop-color="#0f0c05"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g2)"/><polygon points="26,64 30,36 44,50 50,30 56,50 70,36 74,64" fill="#F2B51D"/><circle cx="50" cy="27" r="3.5" fill="#2FBF71"/><circle cx="30" cy="33" r="3" fill="#2FBF71"/><circle cx="70" cy="33" r="3" fill="#2FBF71"/></svg>'
-    },
-    {
-        id: 'kids_purple',
-        name: 'Kids Wonder',
-        accent: '#A855F7',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_kid" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9333ea"/><stop offset="100%" stop-color="#3b0764"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_kid)"/><ellipse cx="50" cy="55" rx="24" ry="26" fill="#fed7aa"/><path d="M26,45 C28,26 40,24 50,24 C60,24 72,26 74,45 C70,36 58,35 50,36 C42,35 30,36 26,45 Z" fill="#27272a"/><ellipse cx="40" cy="54" rx="5" ry="6" fill="#18181b"/><ellipse cx="60" cy="54" rx="5" ry="6" fill="#18181b"/><circle cx="42" cy="52" r="2" fill="#ffffff"/><circle cx="62" cy="52" r="2" fill="#ffffff"/><ellipse cx="50" cy="68" rx="5" ry="4" fill="#e11d48"/></svg>'
-    },
-    {
-        id: 'shadow_red',
-        name: 'Shadow Dark',
+        id: 'luffy',
+        name: 'Monkey D. Luffy',
+        category: 'Anime',
         accent: '#EF4444',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_sh" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#7f1d1d"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_sh)"/><path d="M22,25 C26,15 40,32 50,42 C60,32 74,15 78,25 C82,38 72,55 70,68 C68,78 62,88 50,88 C38,88 32,78 30,68 C28,55 18,38 22,25 Z" fill="#18181b"/><polygon points="35,28 50,45 65,28" fill="#dc2626"/><circle cx="42" cy="52" r="5" fill="#facc15"/><circle cx="58" cy="52" r="5" fill="#facc15"/><circle cx="42" cy="52" r="2.5" fill="#dc2626"/><circle cx="58" cy="52" r="2.5" fill="#dc2626"/><ellipse cx="50" cy="62" rx="12" ry="7" fill="#f4f4f5"/></svg>'
+        url: 'images/avatars/luffy.png'
     },
     {
-        id: 'cat_orange',
-        name: 'Curious Cat',
+        id: 'zoro',
+        name: 'Roronoa Zoro',
+        category: 'Anime',
+        accent: '#10B981',
+        url: 'images/avatars/zoro.png'
+    },
+    {
+        id: 'gojo',
+        name: 'Satoru Gojo',
+        category: 'Anime',
         accent: '#06B6D4',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g_cat" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#164e63"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g_cat)"/><polygon points="25,28 35,50 18,48" fill="#ea580c"/><polygon points="75,28 65,50 82,48" fill="#ea580c"/><ellipse cx="50" cy="58" rx="28" ry="24" fill="#f97316"/><circle cx="38" cy="52" r="9" fill="#facc15"/><circle cx="62" cy="52" r="9" fill="#facc15"/><ellipse cx="38" cy="52" rx="4" ry="7" fill="#0f172a"/><ellipse cx="62" cy="52" rx="4" ry="7" fill="#0f172a"/><polygon points="50,62 46,66 54,66" fill="#fda4af"/><path d="M46,68 Q50,71 54,68" stroke="#0f172a" stroke-width="2" fill="none"/></svg>'
+        url: 'images/avatars/gojo.png'
     },
     {
-        id: 'moxi_neon',
-        name: 'Moxi Emerald',
-        accent: '#2FBF71',
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1b3829"/><stop offset="100%" stop-color="#0a120e"/></radialGradient></defs><rect width="100" height="100" rx="22" fill="url(#g1)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#2FBF71" stroke-width="3"/><polygon points="34,68 50,32 66,68 50,56" fill="#2FBF71"/><polygon points="50,32 66,68 58,68 50,46 42,68 34,68" fill="#F2B51D"/></svg>'
+        id: 'levi',
+        name: 'Levi Ackerman',
+        category: 'Anime',
+        accent: '#64748B',
+        url: 'images/avatars/levi.png'
+    },
+    {
+        id: 'naruto',
+        name: 'Naruto Uzumaki',
+        category: 'Anime',
+        accent: '#F97316',
+        url: 'images/avatars/naruto.png'
+    },
+    {
+        id: 'nami',
+        name: 'Nami',
+        category: 'Anime',
+        accent: '#F59E0B',
+        url: 'images/avatars/nami.png'
+    },
+    {
+        id: 'nezuko',
+        name: 'Nezuko Kamado',
+        category: 'Anime',
+        accent: '#EC4899',
+        url: 'images/avatars/nezuko.png'
+    },
+    {
+        id: 'mikasa',
+        name: 'Mikasa Ackerman',
+        category: 'Anime',
+        accent: '#DC2626',
+        url: 'images/avatars/mikasa.png'
+    },
+    {
+        id: 'makima',
+        name: 'Makima',
+        category: 'Anime',
+        accent: '#E11D48',
+        url: 'images/avatars/makima.png'
+    },
+    {
+        id: 'sailor_moon',
+        name: 'Sailor Moon',
+        category: 'Anime',
+        accent: '#F472B6',
+        url: 'images/avatars/sailor_moon.jpg'
+    },
+    {
+        id: 'spiderman',
+        name: 'Spider-Man',
+        category: 'Comics & Heroes',
+        accent: '#EF4444',
+        url: 'images/avatars/spiderman.png'
+    },
+    {
+        id: 'batman',
+        name: 'Batman',
+        category: 'Comics & Heroes',
+        accent: '#3B82F6',
+        url: 'images/avatars/batman.png'
+    },
+    {
+        id: 'wednesday',
+        name: 'Wednesday Addams',
+        category: 'Pop Culture',
+        accent: '#475569',
+        url: 'images/avatars/wednesday.png'
+    },
+    {
+        id: 'jinx',
+        name: 'Jinx',
+        category: 'Pop Culture',
+        accent: '#3B82F6',
+        url: 'images/avatars/jinx.png'
+    },
+    {
+        id: 'pikachu',
+        name: 'Pikachu',
+        category: 'Kids & Cartoons',
+        accent: '#EAB308',
+        url: 'images/avatars/pikachu.png'
+    },
+    {
+        id: 'spongebob',
+        name: 'SpongeBob',
+        category: 'Kids & Cartoons',
+        accent: '#FACC15',
+        url: 'images/avatars/spongebob.png'
     }
 ];
 
-function svgToDataUrl(svgString) {
-    if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
-        return 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgString)));
-    }
-    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svgString);
-}
-
 const PRESET_MAP = {};
 PRESET_AVATARS.forEach((p) => {
-    p.dataUrl = svgToDataUrl(p.svg);
-    PRESET_MAP[p.id] = p.dataUrl;
+    PRESET_MAP[p.id] = p.url;
 });
+
+const LEGACY_AVATAR_MIGRATION = {
+    'pirate_straw': 'luffy',
+    'gold_crown': 'spiderman',
+    'kids_purple': 'pikachu',
+    'shadow_red': 'batman',
+    'cat_orange': 'naruto',
+    'moxi_neon': 'gojo'
+};
 
 const STORAGE_PROFILES_KEY = 'moxi_profiles';
 const STORAGE_ACTIVE_KEY = 'moxi_active_profile_id';
@@ -67,7 +144,7 @@ function getPrebuiltProfiles(accountName) {
         {
             id: 'prof_primary',
             name: primaryName,
-            avatar: 'pirate_straw',
+            avatar: 'luffy',
             isKid: false,
             isDefault: true,
             isLocked: false
@@ -75,7 +152,7 @@ function getPrebuiltProfiles(accountName) {
         {
             id: 'prof_family',
             name: 'Family',
-            avatar: 'gold_crown',
+            avatar: 'spiderman',
             isKid: false,
             isDefault: false,
             isLocked: true
@@ -83,7 +160,7 @@ function getPrebuiltProfiles(accountName) {
         {
             id: 'prof_kids',
             name: 'Kids',
-            avatar: 'kids_purple',
+            avatar: 'pikachu',
             isKid: true,
             isDefault: false,
             isLocked: true
@@ -102,6 +179,13 @@ function getProfiles() {
                 // Filter out any stale dummy names from initial demos
                 const cleaned = parsed.filter((p) => p.name !== 'Khadar' && p.name !== 'Malik Oskar' && p.name !== 'Faiza' && p.id !== 'prof_khadar' && p.id !== 'prof_malik' && p.id !== 'prof_faiza');
 
+                // Migrate any legacy placeholder avatars to iconic character artwork
+                cleaned.forEach((p) => {
+                    if (LEGACY_AVATAR_MIGRATION[p.avatar]) {
+                        p.avatar = LEGACY_AVATAR_MIGRATION[p.avatar];
+                    }
+                });
+
                 // Ensure Family profile exists and has locked name
                 let familyProf = cleaned.find((p) => p.id === 'prof_family' || p.name === 'Family');
                 if (!familyProf) {
@@ -111,6 +195,9 @@ function getProfiles() {
                     familyProf.id = 'prof_family';
                     familyProf.name = 'Family';
                     familyProf.isLocked = true;
+                    if (familyProf.avatar === 'gold_crown' || !familyProf.avatar) {
+                        familyProf.avatar = 'spiderman';
+                    }
                 }
 
                 // Ensure Kids profile exists and has locked name + isKid
@@ -123,10 +210,16 @@ function getProfiles() {
                     kidsProf.name = 'Kids';
                     kidsProf.isKid = true;
                     kidsProf.isLocked = true;
+                    if (kidsProf.avatar === 'kids_purple' || !kidsProf.avatar) {
+                        kidsProf.avatar = 'pikachu';
+                    }
                 }
 
                 if (cleaned[0]) {
                     cleaned[0].isDefault = true;
+                    if (cleaned[0].avatar === 'pirate_straw' || !cleaned[0].avatar) {
+                        cleaned[0].avatar = 'luffy';
+                    }
                 }
 
                 localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(cleaned));
@@ -224,12 +317,21 @@ function deleteProfile(id) {
 }
 
 function resolveAvatarUrl(avatarValue, fallbackUrl) {
-    if (!avatarValue) return fallbackUrl || PRESET_AVATARS[0].dataUrl;
-    if (PRESET_MAP[avatarValue]) return PRESET_MAP[avatarValue];
-    if (avatarValue.startsWith('data:') || avatarValue.startsWith('http://') || avatarValue.startsWith('https://')) {
-        return avatarValue;
+    const defaultAvatar = PRESET_AVATARS[0].url;
+    if (!avatarValue || typeof avatarValue !== 'string') {
+        return fallbackUrl || defaultAvatar;
     }
-    return fallbackUrl || PRESET_AVATARS[0].dataUrl;
+    const resolvedId = LEGACY_AVATAR_MIGRATION[avatarValue] || avatarValue;
+    if (PRESET_MAP[resolvedId]) {
+        return PRESET_MAP[resolvedId];
+    }
+    if (resolvedId.startsWith('data:') || resolvedId.startsWith('http://') || resolvedId.startsWith('https://') || resolvedId.startsWith('images/')) {
+        return resolvedId;
+    }
+    if (resolvedId.endsWith('.png') || resolvedId.endsWith('.jpg') || resolvedId.endsWith('.jpeg')) {
+        return 'images/avatars/' + resolvedId;
+    }
+    return fallbackUrl || defaultAvatar;
 }
 
 // ── Per-Profile Watch History Isolation ──────────────────────
