@@ -186,44 +186,60 @@ function getProfiles() {
                     }
                 });
 
-                // Ensure Family profile exists and has locked name
-                let familyProf = cleaned.find((p) => p.id === 'prof_family' || p.name === 'Family');
+                // Ensure deduplication of Family and Kids profiles (case-insensitive)
+                const deduped = [];
+                let familyProf = null;
+                let kidsProf = null;
+
+                cleaned.forEach((p) => {
+                    const normName = (typeof p.name === 'string') ? p.name.trim().toLowerCase() : '';
+                    if (p.id === 'prof_family' || normName === 'family') {
+                        if (!familyProf) {
+                            familyProf = {
+                                ...p,
+                                id: 'prof_family',
+                                name: 'Family',
+                                isKid: false,
+                                isLocked: true,
+                                avatar: (p.avatar && p.avatar !== 'gold_crown') ? p.avatar : 'spiderman'
+                            };
+                            deduped.push(familyProf);
+                        }
+                    } else if (p.id === 'prof_kids' || normName === 'kids') {
+                        if (!kidsProf) {
+                            kidsProf = {
+                                ...p,
+                                id: 'prof_kids',
+                                name: 'Kids',
+                                isKid: true,
+                                isLocked: true,
+                                avatar: (p.avatar && p.avatar !== 'kids_purple') ? p.avatar : 'pikachu'
+                            };
+                            deduped.push(kidsProf);
+                        }
+                    } else {
+                        deduped.push(p);
+                    }
+                });
+
                 if (!familyProf) {
                     familyProf = prebuilt[1];
-                    cleaned.push(familyProf);
-                } else {
-                    familyProf.id = 'prof_family';
-                    familyProf.name = 'Family';
-                    familyProf.isLocked = true;
-                    if (familyProf.avatar === 'gold_crown' || !familyProf.avatar) {
-                        familyProf.avatar = 'spiderman';
-                    }
+                    deduped.push(familyProf);
                 }
-
-                // Ensure Kids profile exists and has locked name + isKid
-                let kidsProf = cleaned.find((p) => p.id === 'prof_kids' || p.name === 'Kids');
                 if (!kidsProf) {
                     kidsProf = prebuilt[2];
-                    cleaned.push(kidsProf);
-                } else {
-                    kidsProf.id = 'prof_kids';
-                    kidsProf.name = 'Kids';
-                    kidsProf.isKid = true;
-                    kidsProf.isLocked = true;
-                    if (kidsProf.avatar === 'kids_purple' || !kidsProf.avatar) {
-                        kidsProf.avatar = 'pikachu';
+                    deduped.push(kidsProf);
+                }
+
+                if (deduped[0]) {
+                    deduped[0].isDefault = true;
+                    if (deduped[0].avatar === 'pirate_straw' || !deduped[0].avatar) {
+                        deduped[0].avatar = 'luffy';
                     }
                 }
 
-                if (cleaned[0]) {
-                    cleaned[0].isDefault = true;
-                    if (cleaned[0].avatar === 'pirate_straw' || !cleaned[0].avatar) {
-                        cleaned[0].avatar = 'luffy';
-                    }
-                }
-
-                localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(cleaned));
-                return cleaned;
+                localStorage.setItem(STORAGE_PROFILES_KEY, JSON.stringify(deduped));
+                return deduped;
             }
         }
     } catch (_e) {
