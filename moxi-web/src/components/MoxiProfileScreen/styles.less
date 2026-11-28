@@ -114,19 +114,19 @@
     gap: 0.75rem;
     cursor: pointer;
     transform-origin: center center;
-    transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1);
+    transition: transform 0.22s ease-in-out;
 
     &:hover {
         transform: scale(1.05);
 
         .squircle-avatar {
-            border-color: rgba(47, 191, 113, 0.85);
-            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 0 28px rgba(47, 191, 113, 0.45), 0 18px 36px rgba(0, 0, 0, 0.85);
+            border-color: #2FBF71;
+            box-shadow: 0 0 20px rgba(47, 191, 113, 0.45), 0 8px 24px rgba(0, 0, 0, 0.7);
         }
 
         .profile-name {
             color: #ffffff;
-            text-shadow: 0 0 12px rgba(47, 191, 113, 0.6), 0 2px 6px rgba(0, 0, 0, 0.9);
+            text-shadow: 0 0 10px rgba(47, 191, 113, 0.5), 0 2px 4px rgba(0, 0, 0, 0.9);
         }
     }
 
@@ -144,10 +144,10 @@
     background-position: center 15%;
     background-repeat: no-repeat;
     background-color: #121814;
-    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.25), 0 12px 28px rgba(0, 0, 0, 0.65), 0 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     border: 1.5px solid rgba(255, 255, 255, 0.16);
     overflow: hidden;
-    transition: box-shadow 0.28s ease, border-color 0.28s ease;
+    transition: border-color 0.22s ease-in-out, box-shadow 0.22s ease-in-out;
 }
 
 .kids-badge {
@@ -172,25 +172,23 @@
 }
 
 .add-squircle {
-    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(18, 24, 20, 0.82) 100%);
+    background-color: rgba(26, 34, 29, 0.85);
     border: 1.5px solid rgba(255, 255, 255, 0.18);
-    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.25), 0 10px 24px rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+    transition: background-color 0.22s ease-in-out, border-color 0.22s ease-in-out, box-shadow 0.22s ease-in-out;
 
     .add-plus-svg {
         width: 32px;
         height: 32px;
         color: #e5e7eb;
-        transition: transform 0.28s ease, color 0.28s ease;
+        transition: transform 0.22s ease-in-out, color 0.22s ease-in-out;
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
     }
 
     &:hover {
-        background: radial-gradient(circle at 35% 30%, rgba(47, 191, 113, 0.25) 0%, rgba(15, 32, 22, 0.92) 100%);
+        background-color: rgba(30, 48, 36, 0.95);
         border-color: #2FBF71;
-        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 0 28px rgba(47, 191, 113, 0.45), 0 16px 34px rgba(0, 0, 0, 0.7);
+        box-shadow: 0 0 20px rgba(47, 191, 113, 0.45), 0 8px 24px rgba(0, 0, 0, 0.7);
 
         .add-plus-svg {
             color: #2FBF71;
@@ -200,7 +198,7 @@
     }
 
     &:active {
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
     }
 }
 
@@ -233,7 +231,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-    transition: color 0.2s ease, text-shadow 0.2s ease;
+    transition: color 0.22s ease-in-out, text-shadow 0.22s ease-in-out;
 }
 
 .manage-container {
@@ -248,7 +246,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 2rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(18, 22, 20, 0.85) 100%);
+    background-color: rgba(30, 36, 32, 0.85);
     border: 1.5px solid rgba(255, 255, 255, 0.2);
     border-radius: 9999px;
     color: #e5e7eb;
@@ -256,25 +254,23 @@
     font-weight: 600;
     letter-spacing: 0.4px;
     cursor: pointer;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     transform-origin: center center;
-    transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1), background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, color 0.28s ease;
-    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.25), 0 10px 24px rgba(0, 0, 0, 0.55);
+    transition: transform 0.22s ease-in-out, background-color 0.22s ease-in-out, border-color 0.22s ease-in-out, box-shadow 0.22s ease-in-out, color 0.22s ease-in-out;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
 
     .manage-icon {
         width: 18px;
         height: 18px;
         color: #9ca3af;
-        transition: color 0.25s ease;
+        transition: color 0.22s ease-in-out;
     }
 
     &:hover {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(26, 34, 29, 0.9) 100%);
+        background-color: rgba(40, 52, 44, 0.95);
         border-color: rgba(255, 255, 255, 0.4);
         color: #ffffff;
         transform: scale(1.03);
-        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 14px 32px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.7);
 
         .manage-icon {
             color: #ffffff;
@@ -283,23 +279,23 @@
 
     &:active {
         transform: scale(0.97);
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
     &.active {
-        background: linear-gradient(180deg, rgba(47, 191, 113, 0.28) 0%, rgba(18, 42, 28, 0.92) 100%);
+        background-color: rgba(20, 50, 30, 0.95);
         border-color: #2FBF71;
         color: #2FBF71;
-        box-shadow: inset 0 1px 1.5px rgba(47, 191, 113, 0.5), 0 0 24px rgba(47, 191, 113, 0.35);
+        box-shadow: 0 0 20px rgba(47, 191, 113, 0.35);
 
         .manage-icon {
             color: #2FBF71;
         }
 
         &:hover {
-            background: #2FBF71;
+            background-color: #2FBF71;
             color: #06110a;
-            box-shadow: 0 0 32px rgba(47, 191, 113, 0.6), 0 12px 28px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 28px rgba(47, 191, 113, 0.6);
 
             .manage-icon {
                 color: #06110a;
