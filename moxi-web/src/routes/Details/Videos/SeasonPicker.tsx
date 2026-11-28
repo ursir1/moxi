@@ -3,8 +3,6 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import SegmentedControl from 'stremio/components/SegmentedControl';
-import useMediaQuery from 'stremio/common/useMediaQuery';
-import SeasonsBar from './SeasonsBar';
 
 type Props = {
     className?: string,
@@ -16,14 +14,13 @@ type Props = {
 
 const SeasonPicker = ({ className, options, value, size, onSelect }: Props) => {
     const { t } = useTranslation();
-    const isTouch = useMediaQuery('(hover: none) and (pointer: coarse)');
     const selected = value !== null ? String(value) : null;
 
     const handleSelect = useCallback((value: string) => {
         onSelect(Number(value));
     }, [onSelect]);
 
-    return isTouch ?
+    return (
         <SegmentedControl
             className={className}
             options={options}
@@ -32,13 +29,7 @@ const SeasonPicker = ({ className, options, value, size, onSelect }: Props) => {
             size={size}
             onSelect={handleSelect}
         />
-        :
-        <SeasonsBar
-            className={className}
-            options={options}
-            value={selected}
-            onSelect={handleSelect}
-        />;
+    );
 };
 
 export default SeasonPicker;
