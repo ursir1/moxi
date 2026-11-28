@@ -74,6 +74,7 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
     const [transitioningProfile, setTransitioningProfile] = React.useState(null);
     const [activeBackdropIdx, setActiveBackdropIdx] = React.useState(0);
     const [logoFailed, setLogoFailed] = React.useState(false);
+    const [avatarCategory, setAvatarCategory] = React.useState('All');
     const fileInputRef = React.useRef(null);
 
     // Auto-adopt user's account username for the primary profile
@@ -348,118 +349,232 @@ const MoxiProfileScreen = ({ forceVisible = false, onProfileSelected }) => {
             </div>
 
             {/* Profile Editor / Creator Modal */}
-            {editingProfile && (
-                <div className={styles['editor-backdrop']}>
-                    <div className={styles['editor-card']}>
-                        <div className={styles['editor-header']}>
-                            <div className={styles['editor-title']}>
-                                {isCreatingNew ? 'Create New Profile' : 'Edit Profile'}
+            {editingProfile && (() => {
+                const closeEditor = () => {
+                    setEditingProfile(null);
+                    setIsCreatingNew(false);
+                    setAvatarCategory('All');
+                };
+                const filteredAvatars = PRESET_AVATARS.filter((preset) => {
+                    if (avatarCategory === 'All') return true;
+                    if (avatarCategory === 'Anime') return preset.category === 'Anime';
+                    if (avatarCategory === 'Heroes') return preset.category === 'Comics & Heroes' || preset.category === 'Pop Culture';
+                    if (avatarCategory === 'Cartoons') return preset.category === 'Kids & Cartoons';
+                    return true;
+                });
+                const isKidsLocked = editingProfile.isLocked && editingProfile.id === 'prof_kids';
+                return (
+                    <div
+                        className={styles['editor-backdrop']}
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) closeEditor();
+                        }}
+                    >
+                        <div className={styles['editor-card']}>
+                            <div className={styles['editor-header']}>
+                                <div>
+                                    <div className={styles['editor-title']}>
+                                        {isCreatingNew ? 'Create Profile' : 'Edit Profile'}
+                                    </div>
+                                    <div className={styles['editor-subtitle']}>
+                                        Customize your avatar and profile preferences
+                                    </div>
+                                </div>
+                                <button
+                                    className={styles['editor-close']}
+                                    onClick={closeEditor}
+                                    aria-label="Close"
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                    </svg>
+                                </button>
                             </div>
-                            <button
-                                className={styles['editor-close']}
-                                onClick={() => {
-                                    setEditingProfile(null);
-                                    setIsCreatingNew(false);
-                                }}
-                            >
-                                ×
-                            </button>
-                        </div>
 
-                        <div className={styles['editor-body']}>
-                            <div
-                                className={styles['editor-preview-avatar']}
-                                style={{ backgroundImage: `url('${resolveAvatarUrl(editingProfile.avatar)}')` }}
-                            />
+                            <div className={styles['editor-grid']}>
+                                {/* Left Column: Identity & Settings */}
+                                <div className={styles['editor-identity']}>
+                                    <div
+                                        className={styles['editor-preview-wrap']}
+                                        onClick={() => fileInputRef.current?.click()}
+                                        title="Upload custom photo"
+                                    >
+                                        <div
+                                            className={styles['editor-preview-avatar']}
+                                            style={{ backgroundImage: `url('${resolveAvatarUrl(editingProfile.avatar)}')` }}
+                                        >
+                                            {editingProfile.isKid && (
+                                                <div className={styles['kids-badge']}>kids</div>
+                                            )}
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className={styles['preview-camera-btn']}
+                                            aria-label="Upload photo"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                                <circle cx="12" cy="13" r="4" />
+                                            </svg>
+                                        </button>
+                                    </div>
 
-                            <div className={styles['input-group']}>
-                                <label className={styles['label']}>
-                                    Profile Name {editingProfile.isLocked ? <span style={{ color: '#F2B51D', fontSize: '0.8rem' }}>(Prebuilt - Name Locked)</span> : null}
-                                </label>
-                                <input
-                                    className={styles['text-field']}
-                                    type="text"
-                                    placeholder="Enter profile name..."
-                                    value={editingProfile.name}
-                                    disabled={editingProfile.isLocked}
-                                    style={editingProfile.isLocked ? { opacity: 0.65, cursor: 'not-allowed' } : {}}
-                                    onChange={(e) => {
-                                        if (!editingProfile.isLocked) {
-                                            setEditingProfile({ ...editingProfile, name: e.target.value });
-                                        }
-                                    }}
-                                    autoFocus={!editingProfile.isLocked}
-                                />
-                            </div>
-
-                            <div className={styles['checkbox-row']}>
-                                <label className={styles['checkbox-label']}>
                                     <input
-                                        type="checkbox"
-                                        checked={!!editingProfile.isKid}
-                                        disabled={editingProfile.isLocked && editingProfile.id === 'prof_kids'}
-                                        onChange={(e) => {
-                                            if (!editingProfile.isLocked || editingProfile.id !== 'prof_kids') {
-                                                setEditingProfile({ ...editingProfile, isKid: e.target.checked });
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileUpload}
+                                    />
+
+                                    <div className={styles['input-group']}>
+                                        <div className={styles['label-row']}>
+                                            <label className={styles['label']}>Name</label>
+                                            {editingProfile.isLocked && (
+                                                <span className={styles['locked-pill']}>Prebuilt</span>
+                                            )}
+                                        </div>
+                                        <input
+                                            className={styles['text-field']}
+                                            type="text"
+                                            placeholder="Profile name..."
+                                            value={editingProfile.name}
+                                            disabled={editingProfile.isLocked}
+                                            onChange={(e) => {
+                                                if (!editingProfile.isLocked) {
+                                                    setEditingProfile({ ...editingProfile, name: e.target.value });
+                                                }
+                                            }}
+                                            autoFocus={!editingProfile.isLocked}
+                                        />
+                                    </div>
+
+                                    <div
+                                        className={classnames(styles['toggle-row'], {
+                                            [styles['disabled']]: isKidsLocked
+                                        })}
+                                        onClick={() => {
+                                            if (!isKidsLocked) {
+                                                setEditingProfile({ ...editingProfile, isKid: !editingProfile.isKid });
                                             }
                                         }}
-                                    />
-                                    <span>Kids Profile (Kids badge & safe filters)</span>
-                                </label>
-                            </div>
+                                    >
+                                        <div className={styles['toggle-text']}>
+                                            <span className={styles['toggle-title']}>Kids Mode</span>
+                                            <span className={styles['toggle-desc']}>Age-safe content filters</span>
+                                        </div>
+                                        <div className={classnames(styles['toggle-switch'], {
+                                            [styles['on']]: !!editingProfile.isKid
+                                        })}>
+                                            <div className={styles['toggle-knob']} />
+                                        </div>
+                                    </div>
 
-                            <div className={styles['label']}>Choose Avatar</div>
-                            <div className={styles['avatar-choices']}>
-                                {PRESET_AVATARS.map((preset) => (
-                                    <div
-                                        key={preset.id}
-                                        title={preset.name}
-                                        className={classnames(styles['choice-thumb'], {
-                                            [styles['chosen']]: editingProfile.avatar === preset.id
+                                    <button
+                                        type="button"
+                                        className={styles['upload-btn']}
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="17 8 12 3 7 8" />
+                                            <line x1="12" y1="3" x2="12" y2="15" />
+                                        </svg>
+                                        <span>Upload Custom Photo</span>
+                                    </button>
+                                </div>
+
+                                {/* Right Column: Curated Avatar Gallery */}
+                                <div className={styles['editor-gallery']}>
+                                    <div className={styles['gallery-header']}>
+                                        <span className={styles['label']}>Choose Avatar</span>
+                                        <div className={styles['category-tabs']}>
+                                            {['All', 'Anime', 'Heroes', 'Cartoons'].map((cat) => (
+                                                <button
+                                                    key={cat}
+                                                    type="button"
+                                                    className={classnames(styles['category-tab'], {
+                                                        [styles['active']]: avatarCategory === cat
+                                                    })}
+                                                    onClick={() => setAvatarCategory(cat)}
+                                                >
+                                                    {cat}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles['avatar-choices']}>
+                                        {filteredAvatars.map((preset) => {
+                                            const isChosen = editingProfile.avatar === preset.id;
+                                            return (
+                                                <div
+                                                    key={preset.id}
+                                                    title={preset.name}
+                                                    className={classnames(styles['choice-item'], {
+                                                        [styles['chosen']]: isChosen
+                                                    })}
+                                                    onClick={() => setEditingProfile({ ...editingProfile, avatar: preset.id })}
+                                                >
+                                                    <div
+                                                        className={styles['choice-thumb']}
+                                                        style={{ backgroundImage: `url('${resolveAvatarUrl(preset.id)}')` }}
+                                                    >
+                                                        {isChosen && (
+                                                            <div className={styles['chosen-check']}>
+                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <polyline points="20 6 9 17 4 12" />
+                                                                </svg>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <span className={styles['choice-label']}>
+                                                        {preset.name.split(' ')[0]}
+                                                    </span>
+                                                </div>
+                                            );
                                         })}
-                                        style={{ backgroundImage: `url('${resolveAvatarUrl(preset.id)}')` }}
-                                        onClick={() => setEditingProfile({ ...editingProfile, avatar: preset.id })}
-                                    />
-                                ))}
+                                    </div>
+                                </div>
                             </div>
 
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={handleFileUpload}
-                            />
-                            <button
-                                className={styles['upload-btn']}
-                                onClick={() => fileInputRef.current?.click()}
-                            >
-                                Upload Photo / Avatar
-                            </button>
-                        </div>
-
-                        <div className={styles['editor-footer']}>
-                            {!isCreatingNew && !editingProfile.isLocked && !editingProfile.isDefault && (
-                                <button
-                                    className={styles['delete-btn']}
-                                    onClick={() => {
-                                        deleteProfile(editingProfile.id);
-                                        setEditingProfile(null);
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            )}
-                            <button
-                                className={styles['save-btn']}
-                                onClick={handleSaveEditingProfile}
-                            >
-                                {isCreatingNew ? 'Create Profile' : 'Save Changes'}
-                            </button>
+                            <div className={styles['editor-footer']}>
+                                <div className={styles['footer-left']}>
+                                    {!isCreatingNew && !editingProfile.isLocked && !editingProfile.isDefault && (
+                                        <button
+                                            type="button"
+                                            className={styles['delete-btn']}
+                                            onClick={() => {
+                                                deleteProfile(editingProfile.id);
+                                                closeEditor();
+                                            }}
+                                        >
+                                            Delete Profile
+                                        </button>
+                                    )}
+                                </div>
+                                <div className={styles['footer-right']}>
+                                    <button
+                                        type="button"
+                                        className={styles['cancel-btn']}
+                                        onClick={closeEditor}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={styles['save-btn']}
+                                        onClick={handleSaveEditingProfile}
+                                    >
+                                        {isCreatingNew ? 'Create Profile' : 'Save Changes'}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                );
+            })()}
         </div>
     );
 };
